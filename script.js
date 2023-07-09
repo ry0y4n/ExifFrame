@@ -73,6 +73,7 @@ window.onload = function() {
         let margin = imgData.width * 0.025;  // 余白の大きさ
         let bottomMargin = imgData.height * 0.25;  // 下部の余白の大きさ
         let baseFontSize = imgData.height * 0.0275
+        const fontFamily = 'Inter, sans-serif'
 
         // キャンバスサイズを画像サイズ＋枠分に設定
         canvas.width = imgData.width + margin * 2;
@@ -87,7 +88,7 @@ window.onload = function() {
 
         // テキストを描画（下部の余白に）
         ctx.fillStyle = '#747474';  // 文字色
-        ctx.font = '400 ' + baseFontSize + 'px sans-serif';  // フォントの設定
+        ctx.font = '400 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定
         // ctx.textAlign = 'center';  // 水平中央揃え
         ctx.textBaseline = 'middle';  // 垂直中央揃え
         let lineSpacing = imgData.height * 0.005;  // 行間
@@ -103,14 +104,14 @@ window.onload = function() {
 
         // テキストを描画
         ctx.fillText(text1, textStart, textCenter - lineSpacing);
-        ctx.font = '900 ' + baseFontSize + 'px sans-serif';  // フォントの設定を変更
+        ctx.font = '700 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を変更
         ctx.fillStyle = '#000000';  // 文字色
         ctx.fillText(text2, textStart + text1Width, textCenter - lineSpacing);
-        ctx.font = '600 ' + baseFontSize + 'px sans-serif';  // フォントの設定を戻す
+        ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
         ctx.fillText(text3, textStart + text1Width + text2Width, textCenter - lineSpacing);
 
         ctx.textAlign = 'center';  // 水平中央揃え
-        ctx.font = '400 ' + baseFontSize * 0.8 + 'px sans-serif';  // フォントの設定
+        ctx.font = '400 ' + baseFontSize * 0.8 + 'px ' + fontFamily;  // フォントの設定
         ctx.fillStyle = '#747474';  // 文字色
         let exposureTime;
         if (exifData.ExposureTime != undefined) {
