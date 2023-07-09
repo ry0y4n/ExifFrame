@@ -132,6 +132,7 @@ window.onload = function() {
         ctx.fillStyle = '#000000';  // 文字色
         ctx.fillText(text2, textStart + text1Width, textHeight);
         ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
+        ctx.fillStyle = '#343434';  // 文字色
         ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
 
         ctx.textAlign = 'center';  // 水平中央揃え
