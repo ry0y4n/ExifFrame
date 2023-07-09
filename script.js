@@ -106,7 +106,7 @@ window.onload = function() {
         ctx.font = '900 ' + baseFontSize + 'px sans-serif';  // フォントの設定を変更
         ctx.fillStyle = '#000000';  // 文字色
         ctx.fillText(text2, textStart + text1Width, textCenter - lineSpacing);
-        ctx.font = '700 ' + baseFontSize + 'px sans-serif';  // フォントの設定を戻す
+        ctx.font = '600 ' + baseFontSize + 'px sans-serif';  // フォントの設定を戻す
         ctx.fillText(text3, textStart + text1Width + text2Width, textCenter - lineSpacing);
 
         ctx.textAlign = 'center';  // 水平中央揃え
