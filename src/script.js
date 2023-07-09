@@ -71,13 +71,13 @@ window.onload = function() {
         if (file) {
             reader.readAsDataURL(file);
         }
-    }, false);
 
-    downloadBtn.addEventListener('click', function() {
-        // aタグを作成してclickイベントを発生させることで、キャンバス内容を画像としてダウンロード
-        let a = document.createElement('a');
-        a.href = canvas.toDataURL('image/jpg');
-        a.download = 'image.jpg';
-        a.click();
-    });
+        downloadBtn.addEventListener('click', function() {
+            // aタグを作成してclickイベントを発生させることで、キャンバス内容を画像としてダウンロード
+            let a = document.createElement('a');
+            a.href = canvas.toDataURL('image/jpg');
+            a.download = file.name.replace('.jpg', '-frame.jpg');
+            a.click();
+        });
+    }, false);
 }
