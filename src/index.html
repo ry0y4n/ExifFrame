@@ -7,6 +7,15 @@
     <body>
         <input type="file" id="upload" />
         <button id="download">Download</button>
+        <div id="fixInfoDiv" style="display: none;">
+            <label>機種名：</label><input type="text" id="modelInput" />
+            <label>メーカー名：</label><input type="text" id="makeInput" />
+            <label>焦点距離：</label><input type="text" id="focalLengthIn35mmFilmInput" />
+            <label>絞り：</label><input type="text" id="fNumberInput" />
+            <label>シャッタースピード</label><input type="text" id="exposureTimeInput" />
+            <label>ISO感度</label><input type="text" id="isoSpeedRatingsInput" />
+            <button id="fixInfoButton">修正</button>
+        </div>
         <img id="resultImage" width="400px" />
         <canvas id="canvas" style="display: none;"></canvas>
 

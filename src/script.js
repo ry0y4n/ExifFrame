@@ -4,6 +4,16 @@ window.onload = function() {
     const fileInput = document.getElementById('upload');
     const downloadBtn = document.getElementById('download');
     const resultImage = document.getElementById('resultImage');
+    const fixInfoDiv = document.getElementById('fixInfoDiv');
+    const modelInput = document.getElementById('modelInput');
+    const makeInput = document.getElementById('makeInput');
+    const focalLengthIn35mmFilmInput = document.getElementById('focalLengthIn35mmFilmInput');
+    const fNumberInput = document.getElementById('fNumberInput');
+    const exposureTimeInput = document.getElementById('exposureTimeInput');
+    const isoSpeedRatingsInput = document.getElementById('isoSpeedRatingsInput');
+    const fixInfoButton = document.getElementById('fixInfoButton');
+
+    let imgData = null;
 
     fileInput.addEventListener('change', function(e) {
         let file = e.target.files[0];
@@ -12,6 +22,9 @@ window.onload = function() {
         reader.onloadend = function() {
             let img = new Image();
             img.onload = function() {
+
+                imgData = img;
+
                 // EXIF情報を取得
                 let exifData = {};
                 EXIF.getData(img, function() {
@@ -19,51 +32,10 @@ window.onload = function() {
                     console.log(exifData);
                 });
 
-                let margin = 150;  // 余白の大きさ
-                let bottomMargin = 900;  // 下部の余白の大きさ
-                let fontSize = 110
+                displayFixInfoDiv(exifData)
 
-                // キャンバスサイズを画像サイズ＋枠分に設定
-                canvas.width = img.width + margin * 2;
-                canvas.height = img.height + bottomMargin;
+                draw(exifData);
 
-                // 白い背景を描画
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // 画像を描画（余白の分だけずらして描画）
-                ctx.drawImage(img, margin, margin, img.width, img.height);
-
-                // テキストを描画（下部の余白に）
-                ctx.fillStyle = '#747474';  // 文字色
-                ctx.font = '400 ' + fontSize + 'px sans-serif';  // フォントの設定
-                // ctx.textAlign = 'center';  // 水平中央揃え
-                ctx.textBaseline = 'middle';  // 垂直中央揃え
-                let lineSpacing = 20;  // 行間
-                let textCenter = canvas.height - bottomMargin / 2 // 下の余白の中央位置
-
-                // 一部のテキストを太字にするための準備
-                let text1 = 'Shot on ';
-                let text2 = exifData.Model + '  ';
-                let text3 = exifData.Make;
-                let text1Width = ctx.measureText(text1).width;
-                let text2Width = ctx.measureText(text2).width;
-                let textStart = canvas.width / 2 - (text1Width + text2Width + ctx.measureText(text3).width) / 2;
-
-                // テキストを描画
-                ctx.fillText(text1, textStart, textCenter - lineSpacing);
-                ctx.font = '900 ' + fontSize + 'px sans-serif';  // フォントの設定を変更
-                ctx.fillStyle = '#000000';  // 文字色
-                ctx.fillText(text2, textStart + text1Width, textCenter - lineSpacing);
-                ctx.font = '700 ' + fontSize + 'px sans-serif';  // フォントの設定を戻す
-                ctx.fillText(text3, textStart + text1Width + text2Width, textCenter - lineSpacing);
-
-                ctx.textAlign = 'center';  // 水平中央揃え
-                ctx.font = '400 ' + fontSize * 0.8 + 'px sans-serif';  // フォントの設定
-                ctx.fillStyle = '#747474';  // 文字色
-                ctx.fillText(`${exifData.FocalLengthIn35mmFilm}mm f/${exifData.FNumber} 1/${Math.round(1/exifData.ExposureTime)}s ISO${exifData.ISOSpeedRatings}`, canvas.width / 2, textCenter + lineSpacing + fontSize);
-
-                resultImage.src = canvas.toDataURL();
             }
             img.src = reader.result;
         }
@@ -80,4 +52,76 @@ window.onload = function() {
             a.click();
         });
     }, false);
+
+    fixInfoButton.addEventListener('click', function() {
+        exifData = {
+            Model: modelInput.value,
+            Make: makeInput.value,
+            FocalLengthIn35mmFilm: focalLengthIn35mmFilmInput.value,
+            FNumber: fNumberInput.value,
+            ExposureTime: 1 / exposureTimeInput.value,
+            ISOSpeedRatings: isoSpeedRatingsInput.value
+        }
+        draw(exifData)
+    });
+
+    function draw(exifData) {
+        let margin = imgData.width * 0.025;  // 余白の大きさ
+        let bottomMargin = imgData.height * 0.25;  // 下部の余白の大きさ
+        let baseFontSize = imgData.height * 0.0275
+
+        // キャンバスサイズを画像サイズ＋枠分に設定
+        canvas.width = imgData.width + margin * 2;
+        canvas.height = imgData.height + bottomMargin;
+
+        // 白い背景を描画
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 画像を描画（余白の分だけずらして描画）
+        ctx.drawImage(imgData, margin, margin, imgData.width, imgData.height);
+
+        // テキストを描画（下部の余白に）
+        ctx.fillStyle = '#747474';  // 文字色
+        ctx.font = '400 ' + baseFontSize + 'px sans-serif';  // フォントの設定
+        // ctx.textAlign = 'center';  // 水平中央揃え
+        ctx.textBaseline = 'middle';  // 垂直中央揃え
+        let lineSpacing = imgData.height * 0.005;  // 行間
+        let textCenter = canvas.height - bottomMargin / 2 // 下の余白の中央位置
+
+        // 一部のテキストを太字にするための準備
+        let text1 = 'Shot on ';
+        let text2 = exifData.Model + '  ';
+        let text3 = exifData.Make;
+        let text1Width = ctx.measureText(text1).width;
+        let text2Width = ctx.measureText(text2).width;
+        let textStart = canvas.width / 2 - (text1Width + text2Width + ctx.measureText(text3).width) / 2;
+
+        // テキストを描画
+        ctx.fillText(text1, textStart, textCenter - lineSpacing);
+        ctx.font = '900 ' + baseFontSize + 'px sans-serif';  // フォントの設定を変更
+        ctx.fillStyle = '#000000';  // 文字色
+        ctx.fillText(text2, textStart + text1Width, textCenter - lineSpacing);
+        ctx.font = '700 ' + baseFontSize + 'px sans-serif';  // フォントの設定を戻す
+        ctx.fillText(text3, textStart + text1Width + text2Width, textCenter - lineSpacing);
+
+        ctx.textAlign = 'center';  // 水平中央揃え
+        ctx.font = '400 ' + baseFontSize * 0.8 + 'px sans-serif';  // フォントの設定
+        ctx.fillStyle = '#747474';  // 文字色
+        ctx.fillText(`${exifData.FocalLengthIn35mmFilm}mm f/${exifData.FNumber} 1/${Math.round(1/exifData.ExposureTime)}s ISO${exifData.ISOSpeedRatings}`, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
+
+        resultImage.src = canvas.toDataURL();
+    }
+
+    function displayFixInfoDiv(exifData) {
+        modelInput.value = exifData.Model;
+        makeInput.value = exifData.Make;
+        focalLengthIn35mmFilmInput.value = exifData.FocalLengthIn35mmFilm;
+        fNumberInput.value = exifData.FNumber;
+        exposureTimeInput.value = Math.round(1 / exifData.ExposureTime);
+        isoSpeedRatingsInput.value = exifData.ISOSpeedRatings;
+
+        fixInfoDiv.style.display = 'block';
+    }
+
 }
