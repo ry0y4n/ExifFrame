@@ -63,7 +63,7 @@ window.onload = function() {
             Make: makeInput.value,
             FocalLengthIn35mmFilm: focalLengthIn35mmFilmInput.value,
             FNumber: fNumberInput.value,
-            ExposureTime: 1 / exposureTimeInput.value,
+            ExposureTimeString: exposureTimeInput.value,
             ISOSpeedRatings: isoSpeedRatingsInput.value
         }
         draw(exifData)
@@ -112,7 +112,13 @@ window.onload = function() {
         ctx.textAlign = 'center';  // 水平中央揃え
         ctx.font = '400 ' + baseFontSize * 0.8 + 'px sans-serif';  // フォントの設定
         ctx.fillStyle = '#747474';  // 文字色
-        ctx.fillText(`${exifData.FocalLengthIn35mmFilm}mm f/${exifData.FNumber} 1/${Math.round(1/exifData.ExposureTime)}s ISO${exifData.ISOSpeedRatings}`, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
+        let exposureTime;
+        if (exifData.ExposureTime != undefined) {
+            exposureTime = exifData.ExposureTime >= 1 ? exifData.ExposureTime : `1/${Math.round(1/exifData.ExposureTime)}`;
+        } else {
+            exposureTime = exifData.ExposureTimeString;
+        }
+        ctx.fillText(`${exifData.FocalLengthIn35mmFilm}mm f/${exifData.FNumber} ${exposureTime}s ISO${exifData.ISOSpeedRatings}`, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
 
         resultImage.src = canvas.toDataURL();
     }
@@ -122,7 +128,8 @@ window.onload = function() {
         makeInput.value = exifData.Make;
         focalLengthIn35mmFilmInput.value = exifData.FocalLengthIn35mmFilm;
         fNumberInput.value = exifData.FNumber;
-        exposureTimeInput.value = Math.round(1 / exifData.ExposureTime);
+        let exposureTime = exifData.ExposureTime >= 1 ? exifData.ExposureTime : `1/${Math.round(1/exifData.ExposureTime)}`;
+        exposureTimeInput.value = exposureTime;
         isoSpeedRatingsInput.value = exifData.ISOSpeedRatings;
 
         contentsDiv.style.display = 'block';
