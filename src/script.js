@@ -1,10 +1,9 @@
 window.onload = function() {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    const displayCanvas = document.getElementById('displayCanvas');
-    const displayCtx = displayCanvas.getContext('2d');
     const fileInput = document.getElementById('upload');
     const downloadBtn = document.getElementById('download');
+    const resultImage = document.getElementById('resultImage');
     let img = new Image();
 
     fileInput.addEventListener('change', function(e) {
@@ -13,7 +12,6 @@ window.onload = function() {
 
         reader.onloadend = function() {
             img.onload = function() {
-
                 EXIF.getData(img, function() {
                     let allMetaData = EXIF.getAllTags(this);
                     console.log(allMetaData);
@@ -24,14 +22,14 @@ window.onload = function() {
                 let fontSize = 110
 
                 // キャンバスサイズを画像サイズ＋枠分に設定
-                canvas.width = img.width + margin * 2;  // 10px左右
-                canvas.height = img.height + bottomMargin;  // 10px上、30px下
+                canvas.width = img.width + margin * 2;
+                canvas.height = img.height + bottomMargin;
 
                 // 白い背景を描画
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // 画像を描画（左右上に10pxの余白をとる）
+                // 画像を描画（余白の分だけずらして描画）
                 ctx.drawImage(img, margin, margin, img.width, img.height);
 
                 // テキストを描画（下部の余白に）
@@ -63,12 +61,7 @@ window.onload = function() {
                 ctx.fillStyle = '#747474';  // 文字色
                 ctx.fillText('53mm f/1.4 1/3500s ISO800', canvas.width / 2, textCenter + lineSpacing + fontSize);
 
-                // 縮小表示用のキャンバス設定
-                displayCanvas.width = 800;  // 表示するキャンバスの幅
-                displayCanvas.height = (img.height + 40) * (800 / (img.width + 20));  // アスペクト比を維持
-
-                // 縮小画像を表示用キャンバスに描画
-                displayCtx.drawImage(canvas, 0, 0, displayCanvas.width, displayCanvas.height);
+                resultImage.src = canvas.toDataURL();
             }
             img.src = reader.result;
         }
