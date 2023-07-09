@@ -52,7 +52,8 @@ window.onload = function() {
             // aタグを作成してclickイベントを発生させることで、キャンバス内容を画像としてダウンロード
             let a = document.createElement('a');
             a.href = canvas.toDataURL('image/jpeg');
-            a.download = file.name.replace('.jpeg', '-frame.jpeg');
+            let fileNameWithoutExtension = file.name.split('.')[0];
+            a.download = fileNameWithoutExtension + '-frame.jpeg';
             a.click();
         });
     }, false);
