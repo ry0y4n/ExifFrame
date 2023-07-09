@@ -4,13 +4,13 @@ window.onload = function() {
     const fileInput = document.getElementById('upload');
     const downloadBtn = document.getElementById('download');
     const resultImage = document.getElementById('resultImage');
-    let img = new Image();
 
     fileInput.addEventListener('change', function(e) {
         let file = e.target.files[0];
         let reader = new FileReader();
 
         reader.onloadend = function() {
+            let img = new Image();
             img.onload = function() {
                 // EXIF情報を取得
                 let exifData = {};
