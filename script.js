@@ -101,38 +101,46 @@ window.onload = function() {
         let text2Width = ctx.measureText(text2).width;
         let textStart = canvas.width / 2 - (text1Width + text2Width + ctx.measureText(text3).width) / 2;
 
-        // テキストを描画
-        ctx.fillText(text1, textStart, textCenter - lineSpacing);
-        ctx.font = '900 ' + baseFontSize + 'px sans-serif';  // フォントの設定を変更
-        ctx.fillStyle = '#000000';  // 文字色
-        ctx.fillText(text2, textStart + text1Width, textCenter - lineSpacing);
-        ctx.font = '600 ' + baseFontSize + 'px sans-serif';  // フォントの設定を戻す
-        ctx.fillText(text3, textStart + text1Width + text2Width, textCenter - lineSpacing);
-
-        ctx.textAlign = 'center';  // 水平中央揃え
-        ctx.font = '400 ' + baseFontSize * 0.8 + 'px sans-serif';  // フォントの設定
-        ctx.fillStyle = '#747474';  // 文字色
+        // 2行目のテキスト情報取得
         let exposureTime;
         if (exifData.ExposureTime != undefined) {
             exposureTime = exifData.ExposureTime >= 1 ? exifData.ExposureTime : `1/${Math.round(1/exifData.ExposureTime)}`;
         } else {
             exposureTime = exifData.ExposureTimeString;
         }
-        ctx.fillText(`${exifData.FocalLengthIn35mmFilm}mm f/${exifData.FNumber} ${exposureTime}s ISO${exifData.ISOSpeedRatings}`, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
+
+        let focalLengthText = exifData.FocalLengthIn35mmFilm ? `${exifData.FocalLengthIn35mmFilm}mm ` : '';
+        let fNumberText = exifData.FNumber ? `f/${exifData.FNumber} ` : '';
+        let exposureTimeText = exposureTime ? `${exposureTime}s ` : '';
+        let isoSpeedRatingsText = exifData.ISOSpeedRatings ? `ISO${exifData.ISOSpeedRatings}` : '';
+        let finalText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
+
+        // フォームに反映
+        modelInput.value = exifData.Model;
+        makeInput.value = exifData.Make;
+        focalLengthIn35mmFilmInput.value = focalLengthText.replace('mm ', '');
+        fNumberInput.value = fNumberText.replace('f/', '').replace(' ', '');
+        exposureTimeInput.value = exposureTimeText.replace('s ', '');
+        isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
+
+        // テキストを描画
+        let textHeight = finalText ? textCenter - lineSpacing : textCenter + baseFontSize / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+        ctx.fillText(text1, textStart, textHeight);
+        ctx.font = '900 ' + baseFontSize + 'px sans-serif';  // フォントの設定を変更
+        ctx.fillStyle = '#000000';  // 文字色
+        ctx.fillText(text2, textStart + text1Width, textHeight);
+        ctx.font = '600 ' + baseFontSize + 'px sans-serif';  // フォントの設定を戻す
+        ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
+
+        ctx.textAlign = 'center';  // 水平中央揃え
+        ctx.font = '400 ' + baseFontSize * 0.8 + 'px sans-serif';  // フォントの設定
+        ctx.fillStyle = '#747474';  // 文字色
+        ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
 
         resultImage.src = canvas.toDataURL();
     }
 
     function displayContents(exifData) {
-        modelInput.value = exifData.Model;
-        makeInput.value = exifData.Make;
-        focalLengthIn35mmFilmInput.value = exifData.FocalLengthIn35mmFilm;
-        fNumberInput.value = exifData.FNumber;
-        let exposureTime = exifData.ExposureTime >= 1 ? exifData.ExposureTime : `1/${Math.round(1/exifData.ExposureTime)}`;
-        exposureTimeInput.value = exposureTime;
-        isoSpeedRatingsInput.value = exifData.ISOSpeedRatings;
-
         contentsDiv.style.display = 'block';
     }
-
 }
