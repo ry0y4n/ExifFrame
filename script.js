@@ -15,6 +15,7 @@ window.onload = function() {
     const fixInfoBtn = document.getElementById('fixInfoBtn');
 
     let imgData = null;
+    let isFontsLoaded = false;
 
     uploadBtn.addEventListener('click', function() {
         fileInput.click();
@@ -70,6 +71,23 @@ window.onload = function() {
         draw(exifData)
     });
 
+    function loadFonts() {
+        // CSS Font Loading APIを使用してフォントを読み込む
+        const fontInter400 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-regular.woff2)', { weight: '400' });
+        const fontInter500 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-500.woff2)', { weight: '500' });
+        const fontInter700 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-700.woff2)', { weight: '700' });
+
+        return Promise.all([fontInter400.load(), fontInter500.load(), fontInter700.load()]).then(function(loadedFonts) {
+                loadedFonts.forEach(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                });
+                
+                isFontsLoaded = true;
+            }).catch(function(error) {
+                alert('フォントの読み込みに失敗しました: ' + error);
+            });
+    }
+
     function draw(exifData) {
         let margin = imgData.width * 0.025;  // 余白の大きさ
         let bottomMargin = imgData.height * 0.25;  // 下部の余白の大きさ
@@ -96,7 +114,7 @@ window.onload = function() {
         let textCenter = canvas.height - bottomMargin / 2 // 下の余白の中央位置
 
         // 一部のテキストを太字にするための準備
-        let text1 = 'Shot on ';
+        let text1 = 'Shot on  ';
         let text2 = exifData.Model + '  ';
         let text3 = exifData.Make;
         let text1Width = ctx.measureText(text1).width;
@@ -125,22 +143,38 @@ window.onload = function() {
         exposureTimeInput.value = exposureTimeText.replace('s ', '');
         isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
-        // テキストを描画
-        let textHeight = finalText ? textCenter - lineSpacing : textCenter + baseFontSize / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
-        ctx.fillText(text1, textStart, textHeight);
-        ctx.font = '700 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を変更
-        ctx.fillStyle = '#000000';  // 文字色
-        ctx.fillText(text2, textStart + text1Width, textHeight);
-        ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
-        ctx.fillStyle = '#343434';  // 文字色
-        ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
+        // テキスト描画の関数
+        function renderTexts() {
+            let textHeight = finalText ? textCenter - lineSpacing : textCenter + baseFontSize / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+            ctx.fillText(text1, textStart, textHeight);
+            ctx.font = '700 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を変更
+            ctx.fillStyle = '#000000';  // 文字色
+            ctx.fillText(text2, textStart + text1Width, textHeight);
+            ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
+            ctx.fillStyle = '#343434';  // 文字色
+            ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
 
-        ctx.textAlign = 'center';  // 水平中央揃え
-        ctx.font = '400 ' + baseFontSize * 0.8 + 'px ' + fontFamily;  // フォントの設定
-        ctx.fillStyle = '#747474';  // 文字色
-        ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
+            ctx.textAlign = 'center';  // 水平中央揃え
+            ctx.font = '400 ' + baseFontSize * 0.8 + 'px ' + fontFamily;  // フォントの設定
+            ctx.fillStyle = '#747474';  // 文字色
+            ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
+        }
 
-        resultImage.src = canvas.toDataURL();
+        // 画像の描画処理
+        function showImage() {
+            resultImage.src = canvas.toDataURL(); 
+        }
+
+        // フォント読み込みとテキストの描画（フォントの二重読み込み防止処理）
+        if (isFontsLoaded) {
+            renderTexts()
+            showImage()
+        } else {
+            loadFonts().then(function() {
+                renderTexts()
+                showImage()
+            });
+        }
     }
 
     function displayContents(exifData) {
