@@ -2,18 +2,23 @@ window.onload = function() {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const fileInput = document.getElementById('upload');
-    const downloadBtn = document.getElementById('download');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
     const resultImage = document.getElementById('resultImage');
-    const fixInfoDiv = document.getElementById('fixInfoDiv');
+    const contentsDiv = document.getElementById('contents');
     const modelInput = document.getElementById('modelInput');
     const makeInput = document.getElementById('makeInput');
     const focalLengthIn35mmFilmInput = document.getElementById('focalLengthIn35mmFilmInput');
     const fNumberInput = document.getElementById('fNumberInput');
     const exposureTimeInput = document.getElementById('exposureTimeInput');
     const isoSpeedRatingsInput = document.getElementById('isoSpeedRatingsInput');
-    const fixInfoButton = document.getElementById('fixInfoButton');
+    const fixInfoBtn = document.getElementById('fixInfoBtn');
 
     let imgData = null;
+
+    uploadBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
 
     fileInput.addEventListener('change', function(e) {
         let file = e.target.files[0];
@@ -29,10 +34,9 @@ window.onload = function() {
                 let exifData = {};
                 EXIF.getData(img, function() {
                     exifData = EXIF.getAllTags(this);
-                    console.log(exifData);
                 });
 
-                displayFixInfoDiv(exifData)
+                displayContents(exifData)
 
                 draw(exifData);
 
@@ -53,7 +57,7 @@ window.onload = function() {
         });
     }, false);
 
-    fixInfoButton.addEventListener('click', function() {
+    fixInfoBtn.addEventListener('click', function() {
         exifData = {
             Model: modelInput.value,
             Make: makeInput.value,
@@ -113,7 +117,7 @@ window.onload = function() {
         resultImage.src = canvas.toDataURL();
     }
 
-    function displayFixInfoDiv(exifData) {
+    function displayContents(exifData) {
         modelInput.value = exifData.Model;
         makeInput.value = exifData.Make;
         focalLengthIn35mmFilmInput.value = exifData.FocalLengthIn35mmFilm;
@@ -121,7 +125,7 @@ window.onload = function() {
         exposureTimeInput.value = Math.round(1 / exifData.ExposureTime);
         isoSpeedRatingsInput.value = exifData.ISOSpeedRatings;
 
-        fixInfoDiv.style.display = 'block';
+        contentsDiv.style.display = 'block';
     }
 
 }

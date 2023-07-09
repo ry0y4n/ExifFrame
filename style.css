@@ -1,3 +1,63 @@
 html {
-    background-color: aliceblue;
+    background-color: #EDF2F6;
+    color: #666;
+}
+
+div {
+    /* border: 1px solid; */
+    padding: 10px;
+}
+
+input[type="text"] {
+    width: 120px;
+}
+
+span {
+    display: inline-block;
+    text-align: right;
+    width: 110px;
+}
+
+.container {
+    display: flex;
+}
+
+.center {
+    text-align: center;
+}
+
+.button {
+    color: #fff;
+    background-color: #5DA6F8;
+    border: 0px;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100px;
+}
+
+.button:hover {
+    color: #fff;
+    background: #3B81F5;
+}
+
+#table {
+    justify-content: center;
+    font-size: 12px;
+    padding: 0;
+    margin: 0;
+}
+
+@media screen and (max-width: 480px) {
+	/* 480px以下に適用されるCSS（スマホ用） */
+    .responsive {
+        display: block;
+    }
+
+    #result {
+        width: 300px        
+    }
+
+    #resultImage {
+        width: 300px;
+    }
 }
