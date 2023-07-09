@@ -12,9 +12,11 @@ window.onload = function() {
 
         reader.onloadend = function() {
             img.onload = function() {
+                // EXIF情報を取得
+                let exifData = {};
                 EXIF.getData(img, function() {
-                    let allMetaData = EXIF.getAllTags(this);
-                    console.log(allMetaData);
+                    exifData = EXIF.getAllTags(this);
+                    console.log(exifData);
                 });
 
                 let margin = 150;  // 余白の大きさ
@@ -42,8 +44,8 @@ window.onload = function() {
 
                 // 一部のテキストを太字にするための準備
                 let text1 = 'Shot on ';
-                let text2 = 'X-T2  ';
-                let text3 = 'FUJIFILM';
+                let text2 = exifData.Model + '  ';
+                let text3 = exifData.Make;
                 let text1Width = ctx.measureText(text1).width;
                 let text2Width = ctx.measureText(text2).width;
                 let textStart = canvas.width / 2 - (text1Width + text2Width + ctx.measureText(text3).width) / 2;
@@ -59,7 +61,7 @@ window.onload = function() {
                 ctx.textAlign = 'center';  // 水平中央揃え
                 ctx.font = '400 ' + fontSize * 0.8 + 'px sans-serif';  // フォントの設定
                 ctx.fillStyle = '#747474';  // 文字色
-                ctx.fillText('53mm f/1.4 1/3500s ISO800', canvas.width / 2, textCenter + lineSpacing + fontSize);
+                ctx.fillText(`${exifData.FocalLengthIn35mmFilm}mm f/${exifData.FNumber} 1/${Math.round(1/exifData.ExposureTime)}s ISO${exifData.ISOSpeedRatings}`, canvas.width / 2, textCenter + lineSpacing + fontSize);
 
                 resultImage.src = canvas.toDataURL();
             }
@@ -74,8 +76,8 @@ window.onload = function() {
     downloadBtn.addEventListener('click', function() {
         // aタグを作成してclickイベントを発生させることで、キャンバス内容を画像としてダウンロード
         let a = document.createElement('a');
-        a.href = canvas.toDataURL('image/png');
-        a.download = 'image.png';
+        a.href = canvas.toDataURL('image/jpg');
+        a.download = 'image.jpg';
         a.click();
     });
 }
