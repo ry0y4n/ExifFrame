@@ -7,6 +7,7 @@ window.onload = function() {
     const resultImage = document.getElementById('resultImage');
     const contentsDiv = document.getElementById('contents');
     const contentsDefaultDiv = document.getElementById('contentsDefault');
+    const slideShowImage = document.getElementById('slideshowImage');
     const modelInput = document.getElementById('modelInput');
     const makeInput = document.getElementById('makeInput');
     const focalLengthIn35mmFilmInput = document.getElementById('focalLengthIn35mmFilmInput');
@@ -76,6 +77,20 @@ window.onload = function() {
         }
         draw(exifData)
     });
+    
+    // サンプル画像のスライドショー
+    function slideshowtimer(){
+        if (slideNum === 3){
+            slideNum = 0;
+        }
+        else {
+            slideNum++;
+        }
+        slideShowImage.src = `samples/sample${slideNum + 1}.jpeg`;
+    }
+
+    let slideNum = 0;
+    setInterval(slideshowtimer, 3000);
 
     function loadFonts() {
         // CSS Font Loading APIを使用してフォントを読み込む
