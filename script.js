@@ -138,7 +138,14 @@ window.onload = function() {
         ctx.fillStyle = '#747474';  // 文字色
         ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
 
-        resultImage.src = canvas.toDataURL();
+        let result = canvas.toDataURL();
+        
+        if (result === "data:,") {
+            alert ("フレームの生成に失敗しました。\n画像の横幅、横幅を小さくして試してみてください。");
+            return;
+        }
+
+        resultImage.src = result;
     }
 
     function displayContents(exifData) {
