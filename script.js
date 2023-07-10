@@ -166,7 +166,14 @@ window.onload = function() {
         ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
 
         // 画像の描画処理
-        resultImage.src = canvas.toDataURL(); 
+        let result = canvas.toDataURL();
+        
+        if (result === "data:,") {
+            alert ("フレームの生成に失敗しました。\n画像の縦幅、横幅を小さくして試してみてください。");
+            return;
+        }
+
+        resultImage.src = result;
     }
 
     function displayContents(exifData) {
