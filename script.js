@@ -37,9 +37,16 @@ window.onload = function() {
                     exifData = EXIF.getAllTags(this);
                 });
 
-                displayContents(exifData)
+                // フォント読み込みとテキストの描画（フォントの二重読み込み防止処理）
+                if (isFontsLoaded) {
+                    draw(exifData)
+                } else {
+                    loadFonts().then(function() {
+                        draw(exifData)
+                    });
+                }
 
-                draw(exifData);
+                displayContents(exifData)
 
             }
             img.src = reader.result;
@@ -114,7 +121,7 @@ window.onload = function() {
         let textCenter = canvas.height - bottomMargin / 2 // 下の余白の中央位置
 
         // 一部のテキストを太字にするための準備
-        let text1 = 'Shot on  ';
+        let text1 = 'Shot on ';
         let text2 = exifData.Model + '  ';
         let text3 = exifData.Make;
         let text1Width = ctx.measureText(text1).width;
@@ -143,38 +150,23 @@ window.onload = function() {
         exposureTimeInput.value = exposureTimeText.replace('s ', '');
         isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
-        // テキスト描画の関数
-        function renderTexts() {
-            let textHeight = finalText ? textCenter - lineSpacing : textCenter + baseFontSize / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
-            ctx.fillText(text1, textStart, textHeight);
-            ctx.font = '700 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を変更
-            ctx.fillStyle = '#000000';  // 文字色
-            ctx.fillText(text2, textStart + text1Width, textHeight);
-            ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
-            ctx.fillStyle = '#343434';  // 文字色
-            ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
+        // テキスト描画
+        let textHeight = finalText ? textCenter - lineSpacing : textCenter + baseFontSize / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+        ctx.fillText(text1, textStart, textHeight);
+        ctx.font = '700 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を変更
+        ctx.fillStyle = '#000000';  // 文字色
+        ctx.fillText(text2, textStart + text1Width, textHeight);
+        ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
+        ctx.fillStyle = '#343434';  // 文字色
+        ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
 
-            ctx.textAlign = 'center';  // 水平中央揃え
-            ctx.font = '400 ' + baseFontSize * 0.8 + 'px ' + fontFamily;  // フォントの設定
-            ctx.fillStyle = '#747474';  // 文字色
-            ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
-        }
+        ctx.textAlign = 'center';  // 水平中央揃え
+        ctx.font = '400 ' + baseFontSize * 0.8 + 'px ' + fontFamily;  // フォントの設定
+        ctx.fillStyle = '#747474';  // 文字色
+        ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
 
         // 画像の描画処理
-        function showImage() {
-            resultImage.src = canvas.toDataURL(); 
-        }
-
-        // フォント読み込みとテキストの描画（フォントの二重読み込み防止処理）
-        if (isFontsLoaded) {
-            renderTexts()
-            showImage()
-        } else {
-            loadFonts().then(function() {
-                renderTexts()
-                showImage()
-            });
-        }
+        resultImage.src = canvas.toDataURL(); 
     }
 
     function displayContents(exifData) {
