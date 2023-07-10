@@ -15,6 +15,7 @@ window.onload = function() {
     const fixInfoBtn = document.getElementById('fixInfoBtn');
 
     let imgData = null;
+    let isFontsLoaded = false;
 
     uploadBtn.addEventListener('click', function() {
         fileInput.click();
@@ -36,9 +37,14 @@ window.onload = function() {
                     exifData = EXIF.getAllTags(this);
                 });
 
-                displayContents(exifData)
-
-                draw(exifData);
+                // フォント読み込みとテキストの描画（フォントの二重読み込み防止処理）
+                if (isFontsLoaded) {
+                    draw(exifData)
+                } else {
+                    loadFonts().then(function() {
+                        draw(exifData)
+                    });
+                }
 
             }
             img.src = reader.result;
@@ -70,10 +76,28 @@ window.onload = function() {
         draw(exifData)
     });
 
+    function loadFonts() {
+        // CSS Font Loading APIを使用してフォントを読み込む
+        const fontInter400 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-regular.woff2)', { weight: '400' });
+        const fontInter500 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-500.woff2)', { weight: '500' });
+        const fontInter700 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-700.woff2)', { weight: '700' });
+
+        return Promise.all([fontInter400.load(), fontInter500.load(), fontInter700.load()]).then(function(loadedFonts) {
+                loadedFonts.forEach(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                });
+                
+                isFontsLoaded = true;
+            }).catch(function(error) {
+                alert('フォントの読み込みに失敗しました: ' + error);
+            });
+    }
+
     function draw(exifData) {
         let margin = imgData.width * 0.025;  // 余白の大きさ
         let bottomMargin = imgData.height * 0.25;  // 下部の余白の大きさ
         let baseFontSize = imgData.height * 0.0275
+        const fontFamily = 'Inter, sans-serif'
 
         // キャンバスサイズを画像サイズ＋枠分に設定
         canvas.width = imgData.width + margin * 2;
@@ -88,7 +112,7 @@ window.onload = function() {
 
         // テキストを描画（下部の余白に）
         ctx.fillStyle = '#747474';  // 文字色
-        ctx.font = '400 ' + baseFontSize + 'px sans-serif';  // フォントの設定
+        ctx.font = '400 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定
         // ctx.textAlign = 'center';  // 水平中央揃え
         ctx.textBaseline = 'middle';  // 垂直中央揃え
         let lineSpacing = imgData.height * 0.005;  // 行間
@@ -124,20 +148,22 @@ window.onload = function() {
         exposureTimeInput.value = exposureTimeText.replace('s ', '');
         isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
-        // テキストを描画
+        // テキスト描画
         let textHeight = finalText ? textCenter - lineSpacing : textCenter + baseFontSize / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
         ctx.fillText(text1, textStart, textHeight);
-        ctx.font = '900 ' + baseFontSize + 'px sans-serif';  // フォントの設定を変更
+        ctx.font = '700 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を変更
         ctx.fillStyle = '#000000';  // 文字色
         ctx.fillText(text2, textStart + text1Width, textHeight);
-        ctx.font = '600 ' + baseFontSize + 'px sans-serif';  // フォントの設定を戻す
+        ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
+        ctx.fillStyle = '#343434';  // 文字色
         ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
 
         ctx.textAlign = 'center';  // 水平中央揃え
-        ctx.font = '400 ' + baseFontSize * 0.8 + 'px sans-serif';  // フォントの設定
+        ctx.font = '400 ' + baseFontSize * 0.8 + 'px ' + fontFamily;  // フォントの設定
         ctx.fillStyle = '#747474';  // 文字色
         ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
 
+        // 画像の描画処理
         let result = canvas.toDataURL();
         
         if (result === "data:,") {
@@ -146,6 +172,7 @@ window.onload = function() {
         }
 
         resultImage.src = result;
+        displayContents(exifData)
     }
 
     function displayContents(exifData) {
