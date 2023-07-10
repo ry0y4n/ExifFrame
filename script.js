@@ -195,11 +195,11 @@ window.onload = function() {
 
         resultImage.src = result;
         displayContents(exifData)
-        toggleLoading();
+        toggleLoading(false);
     }
 
-    function toggleLoading() {
-        loadingDiv.style.display = loadingDiv.style.display === 'none' ? 'block' : 'none';
+    function toggleLoading(isDisplay = true) {
+        loadingDiv.style.display = isDisplay ? 'block' : 'none';
     }
 
     function displayContents() {
