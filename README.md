@@ -6,7 +6,7 @@ ExifFrameは，画像に白枠フレームを追加し，Exif情報をフレー�
 
 ## サンプル
 
-![](demo.jpg)
+![](./assets/demo.jpg)
 
 ## 機能
 

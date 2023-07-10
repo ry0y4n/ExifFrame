@@ -1,6 +1,6 @@
 html {
-    background-color: #EDF2F6;
-    color: #666;
+    background-color: #303030;
+    color: #AAA;
 }
 
 div {
@@ -34,17 +34,18 @@ footer {
 }
 
 .button {
-    color: #fff;
-    background-color: #5DA6F8;
+    color: #D8FF91;
+    background-color: #555;
     border: 0px;
-    border-radius: 5px;
+    border-radius: 3px;
     padding: 5px;
     width: 100px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .button:hover {
-    color: #fff;
-    background: #3B81F5;
+    background: #444;
 }
 
 #loading {
