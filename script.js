@@ -46,8 +46,6 @@ window.onload = function() {
                     });
                 }
 
-                displayContents(exifData)
-
             }
             img.src = reader.result;
         }
@@ -174,6 +172,7 @@ window.onload = function() {
         }
 
         resultImage.src = result;
+        displayContents(exifData)
     }
 
     function displayContents(exifData) {
