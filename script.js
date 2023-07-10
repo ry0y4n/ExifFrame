@@ -141,7 +141,7 @@ window.onload = function() {
         let result = canvas.toDataURL();
         
         if (result === "data:,") {
-            alert ("フレームの生成に失敗しました。\n画像の横幅、横幅を小さくして試してみてください。");
+            alert ("フレームの生成に失敗しました。\n画像の縦幅、横幅を小さくして試してみてください。");
             return;
         }
 
