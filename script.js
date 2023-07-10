@@ -5,6 +5,7 @@ window.onload = function() {
     const uploadBtn = document.getElementById('uploadBtn');
     const downloadBtn = document.getElementById('downloadBtn');
     const resultImage = document.getElementById('resultImage');
+    const loadingDiv = document.getElementById('loading');
     const contentsDiv = document.getElementById('contents');
     const contentsDefaultDiv = document.getElementById('contentsDefault');
     const slideShowImage = document.getElementById('slideshowImage');
@@ -24,6 +25,11 @@ window.onload = function() {
     });
 
     fileInput.addEventListener('change', function(e) {
+    
+        // デフォルトのコンテンツを非表示にしてローディング画面を表示
+        contentsDefaultDiv.style.display = 'none';
+        toggleLoading();
+
         let file = e.target.files[0];
         let reader = new FileReader();
 
@@ -189,10 +195,14 @@ window.onload = function() {
 
         resultImage.src = result;
         displayContents(exifData)
+        toggleLoading();
     }
 
-    function displayContents(exifData) {
+    function toggleLoading() {
+        loadingDiv.style.display = loadingDiv.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function displayContents() {
         contentsDiv.style.display = 'block';
-        contentsDefaultDiv.style.display = 'none';
     }
 }

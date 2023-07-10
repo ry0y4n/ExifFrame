@@ -47,6 +47,20 @@ footer {
     background: #3B81F5;
 }
 
+#loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+.loadingText {
+    text-align: center;
+    margin: 0;
+}
+
 #table {
     justify-content: center;
     font-size: 12px;
