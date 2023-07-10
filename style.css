@@ -18,6 +18,13 @@ span {
     width: 110px;
 }
 
+footer {
+    text-align: center;
+    position: sticky;
+    top: 100vh;
+    width: 100%;
+}
+
 .container {
     display: flex;
 }
