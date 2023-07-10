@@ -6,6 +6,7 @@ window.onload = function() {
     const downloadBtn = document.getElementById('downloadBtn');
     const resultImage = document.getElementById('resultImage');
     const contentsDiv = document.getElementById('contents');
+    const contentsDefaultDiv = document.getElementById('contentsDefault');
     const modelInput = document.getElementById('modelInput');
     const makeInput = document.getElementById('makeInput');
     const focalLengthIn35mmFilmInput = document.getElementById('focalLengthIn35mmFilmInput');
@@ -177,5 +178,6 @@ window.onload = function() {
 
     function displayContents(exifData) {
         contentsDiv.style.display = 'block';
+        contentsDefaultDiv.style.display = 'none';
     }
 }
