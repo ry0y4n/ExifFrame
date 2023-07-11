@@ -1,14 +1,23 @@
 window.onload = function () {
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+  // ファイル操作関連
   const fileInput = document.getElementById('upload');
   const uploadBtn = document.getElementById('uploadBtn');
   const downloadBtn = document.getElementById('downloadBtn');
-  const resultImage = document.getElementById('resultImage');
+
+  // ローディング関連
   const loadingDiv = document.getElementById('loading');
-  const contentsDiv = document.getElementById('contents');
-  const contentsDefaultDiv = document.getElementById('contentsDefault');
+
+  // サンプル画像関連
+  const sampleContent = document.getElementById('sampleContent');
   const slideShowImage = document.getElementById('slideshowImage');
+
+  // 結果画像表示関連
+  const contentsDiv = document.getElementById('resultContents');
+  const resultImage = document.getElementById('resultImage');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');  
+
+  // 結果表示・修正フォーム関連
   const modelInput = document.getElementById('modelInput');
   const makeInput = document.getElementById('makeInput');
   const focalLengthIn35mmFilmInput = document.getElementById('focalLengthIn35mmFilmInput');
@@ -27,7 +36,7 @@ window.onload = function () {
   fileInput.addEventListener('change', function (e) {
 
     // デフォルトのコンテンツを非表示にしてローディング画面を表示
-    contentsDefaultDiv.style.display = 'none';
+    sampleContent.style.display = 'none';
     toggleLoading();
 
     let file = e.target.files[0];
