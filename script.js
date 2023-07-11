@@ -93,6 +93,7 @@ window.onload = function () {
       ExposureTimeString: exposureTimeInput.value,
       ISOSpeedRatings: isoSpeedRatingsInput.value
     }
+    toggleImageDisplay();
     draw(exifData)
   });
 
