@@ -33,23 +33,23 @@ div {
 
 .header {
   text-align: center;
+}
 
-  .header__icon {
-    width: 200px
-  }
+.header__icon {
+  width: 200px
 }
 
 /* ブロック単位 */
 .file-manipulation-form {
   text-align: center;
+}
 
-  .file-manipulation-form__button {
-    margin: 0 5px;
-  }
+.file-manipulation-form__button {
+  margin: 0 5px;
+}
 
-  .file-manipulation-form__button--hide {
-    display: none;
-  }
+.file-manipulation-form__button--hide {
+  display: none;
 }
 
 .loading--hide {
@@ -58,56 +58,56 @@ div {
   flex-direction: column;
   height: 500px;
   justify-content: center;
+}
 
-  .loading__text {
-    margin: 0;
-  }
+.loading__text {
+  margin: 0;
+}
 
-  .loading__text--small {
-    font-size: 10px;
-  }
+.loading__text--small {
+  font-size: 10px;
 }
 
 .sample-content {
   text-align: center;
+}
 
-  .sample-content__title {
-    font-size: 10px;
-  }
+.sample-content__title {
+  font-size: 10px;
+}
 
-  .sample-content__slideshow {
-    width: 600px;
-  }
+.sample-content__slideshow {
+  width: 600px;
 }
 
 .result {
   display: none;
   text-align: center;
+}
 
-  .result__image {
-    width: 600px;
-  }
+.result__image {
+  width: 600px;
+}
 
-  .result__canvas--hide {
-    display: none;
-  }
+.result__canvas--hide {
+  display: none;
+}
 
-  .result-table {
-    font-size: 12px;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
+.result-table {
+  font-size: 12px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
 
-    .result-table__item {
-      display: inline-block;
-      text-align: right;
-      width: 120px;
-    }
+.result-table__item {
+  display: inline-block;
+  text-align: right;
+  width: 120px;
+}
 
-    .result-table__form {
-      width: 120px;
-    }
-  }
+.result-table__form {
+  width: 120px;
 }
 
 .footer {
