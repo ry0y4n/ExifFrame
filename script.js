@@ -15,7 +15,7 @@ window.onload = function () {
   const contentsDiv = document.getElementById('resultContents');
   const resultImage = document.getElementById('resultImage');
   const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');  
+  const ctx = canvas.getContext('2d');
 
   // 結果表示・修正フォーム関連
   const modelInput = document.getElementById('modelInput');
@@ -28,6 +28,7 @@ window.onload = function () {
 
   let imgData = null;
   let isFontsLoaded = false;
+  let isImageDisplayed = true;
 
   uploadBtn.addEventListener('click', function () {
     fileInput.click();
@@ -35,8 +36,9 @@ window.onload = function () {
 
   fileInput.addEventListener('change', function (e) {
 
-    // デフォルトのコンテンツを非表示にしてローディング画面を表示
+    // サンプルコンテンツを非表示にしてローディング画面を表示
     sampleContent.style.display = 'none';
+    toggleImageDisplay();
     toggleLoading();
 
     let file = e.target.files[0];
@@ -46,6 +48,7 @@ window.onload = function () {
       let img = new Image();
       img.onload = function () {
 
+        // 修正用に元画像を変数に保存
         imgData = img;
 
         // EXIF情報を取得
@@ -125,29 +128,30 @@ window.onload = function () {
   }
 
   function draw(exifData) {
-    let margin = imgData.width * 0.025;  // 余白の大きさ
-    let bottomMargin = imgData.height * 0.25;  // 下部の余白の大きさ
-    let baseFontSize = imgData.height * 0.0275
-    const fontFamily = 'Inter, sans-serif'
+    // 画像に応じたマージンやフォントサイズを計算
+    const HORIZONTAL_MARGIN = imgData.width * 0.025;  // 余白の大きさ
+    const BOTTOM_MARGIN = imgData.height * 0.25;  // 下部の余白の大きさ
+    const BASE_FONT_SIZE = imgData.height * 0.0275  // ベースとなるフォントサイズ
+    const FONT_FAMILY = 'Inter, sans-serif' // フォント
+    const LINE_SPACING = imgData.height * 0.005;  // 行間
 
     // キャンバスサイズを画像サイズ＋枠分に設定
-    canvas.width = imgData.width + margin * 2;
-    canvas.height = imgData.height + bottomMargin;
+    canvas.width = imgData.width + HORIZONTAL_MARGIN * 2;
+    canvas.height = imgData.height + BOTTOM_MARGIN;
 
     // 白い背景を描画
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // 画像を描画（余白の分だけずらして描画）
-    ctx.drawImage(imgData, margin, margin, imgData.width, imgData.height);
+    ctx.drawImage(imgData, HORIZONTAL_MARGIN, HORIZONTAL_MARGIN, imgData.width, imgData.height);
 
     // テキストを描画（下部の余白に）
     ctx.fillStyle = '#747474';  // 文字色
-    ctx.font = '400 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定
+    ctx.font = '400 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定
     // ctx.textAlign = 'center';  // 水平中央揃え
     ctx.textBaseline = 'middle';  // 垂直中央揃え
-    let lineSpacing = imgData.height * 0.005;  // 行間
-    let textCenter = canvas.height - bottomMargin / 2 // 下の余白の中央位置
+    let textCenter = canvas.height - BOTTOM_MARGIN / 2 // 下の余白の中央位置
 
     // 一部のテキストを太字にするための準備
     let text1 = 'Shot on ';
@@ -180,19 +184,19 @@ window.onload = function () {
     isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
     // テキスト描画
-    let textHeight = finalText ? textCenter - lineSpacing : textCenter + baseFontSize / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+    let textHeight = finalText ? textCenter - LINE_SPACING : textCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
     ctx.fillText(text1, textStart, textHeight);
-    ctx.font = '700 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を変更
+    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
     ctx.fillStyle = '#000000';  // 文字色
     ctx.fillText(text2, textStart + text1Width, textHeight);
-    ctx.font = '500 ' + baseFontSize + 'px ' + fontFamily;  // フォントの設定を戻す
+    ctx.font = '500 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を戻す
     ctx.fillStyle = '#343434';  // 文字色
     ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
 
     ctx.textAlign = 'center';  // 水平中央揃え
-    ctx.font = '400 ' + baseFontSize * 0.8 + 'px ' + fontFamily;  // フォントの設定
+    ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY;  // フォントの設定
     ctx.fillStyle = '#747474';  // 文字色
-    ctx.fillText(finalText, canvas.width / 2, textCenter + lineSpacing + baseFontSize);
+    ctx.fillText(finalText, canvas.width / 2, textCenter + LINE_SPACING + BASE_FONT_SIZE);
 
     // 画像の描画処理
     let result = canvas.toDataURL();
@@ -203,15 +207,16 @@ window.onload = function () {
     }
 
     resultImage.src = result;
-    displayContents(exifData)
     toggleLoading(false);
+    toggleImageDisplay();
+  }
+
+  function toggleImageDisplay() {
+    contentsDiv.style.display = isImageDisplayed ? 'none' : 'block';
+    isImageDisplayed = !isImageDisplayed;
   }
 
   function toggleLoading(isDisplay = true) {
     loadingDiv.style.display = isDisplay ? 'flex' : 'none';
-  }
-
-  function displayContents() {
-    contentsDiv.style.display = 'block';
   }
 }
