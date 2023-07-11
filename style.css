@@ -17,14 +17,14 @@ div {
 }
 
 .button {
-  color: #D8FF91;
   background-color: #555;
   border: 0px;
   border-radius: 3px;
-  padding: 5px;
-  width: 100px;
+  color: #D8FF91;
   font-size: 12px;
   font-weight: bold;
+  padding: 5px;
+  width: 100px;
 }
 
 .button:hover {
@@ -53,11 +53,11 @@ div {
 }
 
 .loading--hide {
-  display: none;
   align-items: center;
-  justify-content: center;
+  display: none;
   flex-direction: column;
   height: 500px;
+  justify-content: center;
 
   .loading__text {
     margin: 0;
@@ -93,10 +93,10 @@ div {
   }
 
   .result-table {
-    justify-content: center;
     font-size: 12px;
-    padding: 0;
+    justify-content: center;
     margin: 0;
+    padding: 0;
 
     .result-table__item {
       display: inline-block;
@@ -112,8 +112,8 @@ div {
 
 .footer {
   font-size: 10px;
-  text-align: center;
   position: sticky;
+  text-align: center;
   top: 100vh;
   width: 100%;
 }
