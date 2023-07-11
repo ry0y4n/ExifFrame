@@ -1,85 +1,160 @@
 html {
-    background-color: #303030;
-    color: #AAA;
+  background-color: #303030;
+  color: #AAA;
 }
 
 div {
-    /* border: 1px solid; */
-    padding: 10px;
+  /* border: 1px solid; */
+  padding: 10px;
 }
 
 input[type="text"] {
-    width: 120px;
+  width: 120px;
 }
 
 span {
-    display: inline-block;
-    text-align: right;
-    width: 110px;
+  display: inline-block;
+  text-align: right;
+  width: 110px;
 }
 
-footer {
-    text-align: center;
-    position: sticky;
-    top: 100vh;
-    width: 100%;
-}
+/* footer {
+  text-align: center;
+  position: sticky;
+  top: 100vh;
+  width: 100%;
+} */
 
+/* #loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+} */
+
+/* #table {
+  justify-content: center;
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+} */
+
+/* 汎用 */
 .container {
-    display: flex;
+  display: flex;
 }
 
 .center {
-    text-align: center;
+  text-align: center;
 }
 
 .button {
-    color: #D8FF91;
-    background-color: #555;
-    border: 0px;
-    border-radius: 3px;
-    padding: 5px;
-    width: 100px;
-    font-size: 12px;
-    font-weight: bold;
+  color: #D8FF91;
+  background-color: #555;
+  border: 0px;
+  border-radius: 3px;
+  padding: 5px;
+  width: 100px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .button:hover {
-    background: #444;
+  background: #444;
 }
 
-#loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
+.header {
+  text-align: center;
+
+  .header__icon {
+    width: 200px
+  }
 }
 
-.loadingText {
-    text-align: center;
+/* ブロック単位 */
+
+.file-manipulation-form {
+  text-align: center;
+
+  .file-manipulation-form__button {
+    margin: 0 5px;
+  }
+
+  .file-manipulation-form__button--hide {
+    display: none;
+  }
+}
+
+.loading--hide {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 500px;
+
+  .loading__text {
     margin: 0;
+  }
+
+  .loading__text--small {
+    font-size: 10px;
+  }
 }
 
-#table {
+.sample-content {
+  text-align: center;
+
+  .sample-content__title {
+    font-size: 10px;
+  }
+
+  .sample-content__slideshow {
+    width: 600px;
+  }
+}
+
+.result {
+  display: none;
+  text-align: center;
+
+  .result__image {
+    width: 600px;
+  }
+
+  .result__canvas--hide {
+    display: none;
+  }
+
+  .result__table {
     justify-content: center;
     font-size: 12px;
     padding: 0;
     margin: 0;
+  }
 }
 
+.footer {
+  font-size: 10px;
+  text-align: center;
+  position: sticky;
+  top: 100vh;
+  width: 100%;
+}
+
+/* スマホ用 */
 @media screen and (max-width: 480px) {
-	/* 480px以下に適用されるCSS（スマホ用） */
-    .responsive {
-        display: block;
-    }
 
-    #slideshowImage {
-        width: 300px;
-    }
+  .responsive {
+    display: block;
+  }
 
-    #resultImage {
-        width: 300px;
-    }
+  #slideshowImage {
+    width: 300px;
+  }
+
+  #resultImage {
+    width: 300px;
+  }
 }

@@ -1,67 +1,71 @@
+<!DOCTYPE html>
 <html>
-    <head prefix="og: https://ogp.me/ns#">
-        <title>ExifFrame</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width">
-        <meta property="og:url" content="https://ry0y4n.github.io/ExifFrame/">
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="ExifFrame">
-        <meta property="og:image" content="https://ry0y4n.github.io/ExifFrame/assets/icon.png">
-        <meta name="twitter:card" content="summary">
-        <meta name="twitter:title" content="ExifFrame">
-        <meta name="twitter:description" content="写真にフレームを追加しExif情報を表示・編集するウェブアプリです">
-        <meta name="twitter:image" content="https://ry0y4n.github.io/ExifFrame/assets/icon.png">
-        <meta name="twitter:url" content="https://ry0y4n.github.io/ExifFrame/">
-        <meta name="twitter:creator" content="@AnoTensai">
-        <link rel="icon" href="./assets/favicon.ico">
-        <link rel="stylesheet" href="style.css">
-        <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
-    </head>
-    <body>
-        <div>
-            <div class="center">
-                <img src="./assets/icon-with-text.png" width="300px" />
-            </div>
-            <div class="center">
-                <button class="button" id="uploadBtn">アップロード</button>
-                <input class="button" type="file" id="upload" style="display: none;"/>
-                <button class="button" id="downloadBtn">ダウンロード</button>
-            </div>
-            <div id="loading" style="display: none;">
-                <p class="loadingText">処理中...</p>
-                <p class="loadingText"><small>（完了までに数秒かかることがあります）</small></p>
-            </div>
-            <div class="container responsive center" id="contentsDefault" style="display: block;">
-                <p style="font-size: 10px;">サンプル画像スライドショー</p>
-                <img id="slideshowImage" width="600px" src="./samples/sample1.jpeg"/>
-            </div>
-            <div class="container responsive" id="contents" style="display: none;">
-                <div id="result" class="center">
-                    <img id="resultImage" width="600px" />
-                    <canvas id="canvas" style="display: none;"></canvas>
-                </div>
-                <div>
-                    <div class="container" id="table">
-                        <div>
-                            <span>機種名</span> : <input type="text" id="modelInput" /><br />
-                            <span>メーカー名</span> : <input type="text" id="makeInput" /><br />
-                            <span>焦点距離</span> : <input type="text" id="focalLengthIn35mmFilmInput"></input><br />
-                            <span>絞り</span> : <input type="text" id="fNumberInput" /><br />
-                            <span>シャッタースピード</span> : <input type="text" id="exposureTimeInput" /><br />
-                            <span>ISO感度</span> : <input type="text" id="isoSpeedRatingsInput" />
-                        </div>
-                    </div>
-                    <div class="center">
-                        <button id="fixInfoBtn" class="button">修正</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p><small>&copy; 2023 momosuke</small></p>
-        </footer>
 
-        <script src="script.js"></script>
-    </body>
+<head prefix="og: https://ogp.me/ns#">
+  <title>ExifFrame</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <meta property="og:url" content="https://ry0y4n.github.io/ExifFrame/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ExifFrame">
+  <meta property="og:image" content="https://ry0y4n.github.io/ExifFrame/assets/icon.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ExifFrame">
+  <meta name="twitter:description" content="写真にフレームを追加しExif情報を表示・編集するウェブアプリです">
+  <meta name="twitter:image" content="https://ry0y4n.github.io/ExifFrame/assets/icon.png">
+  <meta name="twitter:url" content="https://ry0y4n.github.io/ExifFrame/">
+  <meta name="twitter:creator" content="@AnoTensai">
+  <link rel="icon" href="./assets/favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+</head>
+
+<body>
+  <div>
+    <div class="header">
+      <img class="header__icon" src="./assets/icon-with-text.png" />
+    </div>
+    <div class="file-manipulation-form">
+      <button class="file-manipulation-form__button button" id="uploadBtn">アップロード</button>
+      <input class="file-manipulation-form__button--hide button" type="file" id="upload" />
+      <button class="file-manipulation-form__button button" id="downloadBtn">ダウンロード</button>
+    </div>
+    <div class="loading--hide" id="loading">
+      <p class="loading__text">処理中...</p>
+      <p class="loading__text loading__text--small">（完了までに数秒かかることがあります）</p>
+    </div>
+    <div class="sample-content container responsive" id="contentsDefault" style="display: block;">
+      <p class="sample-content__title">サンプル画像スライドショー</p>
+      <img class="sample-content__slideshow" id="slideshowImage" src="./samples/sample1.jpeg" />
+    </div>
+    <div class="result container responsive" id="contents">
+      <div>
+        <img class="result__image" id="resultImage" />
+        <canvas class="result__canvas--hide" id="canvas"></canvas>
+      </div>
+      <div>
+        <div class="result__table container">
+          <div>
+            <span>機種名</span> : <input type="text" id="modelInput" /><br />
+            <span>メーカー名</span> : <input type="text" id="makeInput" /><br />
+            <span>焦点距離</span> : <input type="text" id="focalLengthIn35mmFilmInput"></input><br />
+            <span>絞り</span> : <input type="text" id="fNumberInput" /><br />
+            <span>シャッタースピード</span> : <input type="text" id="exposureTimeInput" /><br />
+            <span>ISO感度</span> : <input type="text" id="isoSpeedRatingsInput" />
+          </div>
+        </div>
+        <div class="center">
+          <button id="fixInfoBtn" class="button">修正</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer">&copy; 2023 momosuke</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
 </html>
