@@ -1,19 +1,6 @@
 /* 汎用 */
-body {
-  background-color: #303030;
-  color: #AAA;
-}
-
-div {
-  padding: 10px;
-}
-
 .container {
   display: flex;
-}
-
-.center {
-  text-align: center;
 }
 
 .button {
@@ -108,14 +95,6 @@ div {
 
 .result-table__form {
   width: 120px;
-}
-
-.footer {
-  font-size: 10px;
-  position: sticky;
-  text-align: center;
-  top: 100vh;
-  width: 100%;
 }
 
 /* スマホ用 */
