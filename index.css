@@ -97,6 +97,10 @@
   width: 120px;
 }
 
+.footer__link-to-terms {
+  color: #AAA;
+}
+
 /* スマホ用 */
 @media screen and (max-width: 480px) {
 
