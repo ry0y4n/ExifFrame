@@ -131,10 +131,10 @@ window.onload = function () {
   function draw(exifData) {
     // 画像に応じたマージンやフォントサイズを計算
     const HORIZONTAL_MARGIN = imgData.width * 0.025;  // 余白の大きさ
-    const BOTTOM_MARGIN = imgData.height * 0.25;  // 下部の余白の大きさ
-    const BASE_FONT_SIZE = imgData.height * 0.0275  // ベースとなるフォントサイズ
+    const BOTTOM_MARGIN = imgData.width > imgData.height ? imgData.height * 0.25 : imgData.width * 0.17;  // 下部の余白の大きさ
+    const BASE_FONT_SIZE = imgData.width > imgData.height ? imgData.height * 0.0275 : imgData.width * 0.02  // ベースとなるフォントサイズ
     const FONT_FAMILY = 'Inter, sans-serif' // フォント
-    const LINE_SPACING = imgData.height * 0.005;  // 行間
+    const LINE_SPACING = imgData.width > imgData.height ? imgData.height * 0.005 : imgData.width * 0.0045;  // 行間
 
     // キャンバスサイズを画像サイズ＋枠分に設定
     canvas.width = imgData.width + HORIZONTAL_MARGIN * 2;
