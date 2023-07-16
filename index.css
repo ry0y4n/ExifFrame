@@ -16,6 +16,7 @@
 
 .button:hover {
   background: #444;
+  cursor: pointer;
 }
 
 .header {
