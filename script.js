@@ -165,8 +165,12 @@ window.onload = function () {
     let textCenter = canvas.height - BOTTOM_MARGIN / 2 // 下の余白の中央位置
 
     // 一部のテキストを太字にするための準備
-    text1 = exifData.Make + '  ';
-    text2 = exifData.Model;
+    if ("Make" in exifData) {
+      text1 = exifData.Make + '  ';
+    }
+    if ("Model" in exifData) {
+      text2 = exifData.Model;
+    }
     if ("LensModel" in exifData) {
       text2 += '  /  ';
       text3 = exifData.LensModel;
@@ -190,9 +194,9 @@ window.onload = function () {
     let finalText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
 
     // フォームに反映
-    makeInput.value = exifData.Make;
-    modelInput.value = exifData.Model;
-    lensInput.value = exifData.LensModel != undefined ? exifData.LensModel : '';
+    makeInput.value = "Make" in exifData ? exifData.Make : '';
+    modelInput.value = "Model" in exifData ? exifData.Model : '';
+    lensInput.value = "LensModel" in exifData ? exifData.LensModel : '';
     focalLengthIn35mmFilmInput.value = focalLengthText.replace('mm ', '');
     fNumberInput.value = fNumberText.replace('f/', '').replace(' ', '');
     exposureTimeInput.value = exposureTimeText.replace('s ', '');
