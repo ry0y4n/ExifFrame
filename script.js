@@ -18,8 +18,9 @@ window.onload = function () {
   const ctx = canvas.getContext('2d');
 
   // 結果表示・修正フォーム関連
-  const modelInput = document.getElementById('modelInput');
   const makeInput = document.getElementById('makeInput');
+  const modelInput = document.getElementById('modelInput');
+  const lensInput = document.getElementById('lensInput');
   const focalLengthIn35mmFilmInput = document.getElementById('focalLengthIn35mmFilmInput');
   const fNumberInput = document.getElementById('fNumberInput');
   const exposureTimeInput = document.getElementById('exposureTimeInput');
@@ -91,8 +92,9 @@ window.onload = function () {
 
   fixInfoBtn.addEventListener('click', function () {
     exifData = {
-      Model: modelInput.value,
       Make: makeInput.value,
+      Model: modelInput.value,
+      LensModel: lensInput.value,
       FocalLengthIn35mmFilm: focalLengthIn35mmFilmInput.value,
       FNumber: fNumberInput.value,
       ExposureTimeString: exposureTimeInput.value,
@@ -188,8 +190,9 @@ window.onload = function () {
     let finalText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
 
     // フォームに反映
-    modelInput.value = exifData.Model;
     makeInput.value = exifData.Make;
+    modelInput.value = exifData.Model;
+    lensInput.value = exifData.LensModel != undefined ? exifData.LensModel : '';
     focalLengthIn35mmFilmInput.value = focalLengthText.replace('mm ', '');
     fNumberInput.value = fNumberText.replace('f/', '').replace(' ', '');
     exposureTimeInput.value = exposureTimeText.replace('s ', '');
