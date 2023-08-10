@@ -91,7 +91,7 @@ window.onload = function () {
   }, false);
 
   fixInfoBtn.addEventListener('click', function () {
-    exifData = {
+    let inputs = {
       Make: makeInput.value,
       Model: modelInput.value,
       LensModel: lensInput.value,
@@ -99,6 +99,15 @@ window.onload = function () {
       FNumber: fNumberInput.value,
       ExposureTimeString: exposureTimeInput.value,
       ISOSpeedRatings: isoSpeedRatingsInput.value
+    };
+    
+    exifData = {};
+    
+    for (let key in inputs) {
+      let trimed_input = inputs[key].trim()
+      if (trimed_input !== "") {
+        exifData[key] = trimed_input;
+      }
     }
     toggleImageDisplay();
     draw(exifData)
@@ -166,14 +175,13 @@ window.onload = function () {
 
     // 一部のテキストを太字にするための準備
     if ("Make" in exifData) {
-      text1 = exifData.Make + '  ';
+      text1 = exifData.Make;
     }
     if ("Model" in exifData) {
-      text2 = exifData.Model;
+      text2 = '  ' + exifData.Model;
     }
     if ("LensModel" in exifData) {
-      text2 += '  /  ';
-      text3 = exifData.LensModel;
+      text3 = '  /  ' + exifData.LensModel;
     }
     let text1Width = ctx.measureText(text1).width;
     let text2Width = ctx.measureText(text2).width;
