@@ -27,6 +27,7 @@ window.onload = function () {
   const isoSpeedRatingsInput = document.getElementById('isoSpeedRatingsInput');
   const fixInfoBtn = document.getElementById('fixInfoBtn');
 
+  let file;
   let imgData = null;
   let isFontsLoaded = false;
   let isImageDisplayed = true;
@@ -42,7 +43,7 @@ window.onload = function () {
     toggleImageDisplay();
     toggleLoading();
 
-    let file = e.target.files[0];
+    file = e.target.files[0];
     let reader = new FileReader();
 
     reader.onloadend = function () {
@@ -79,16 +80,16 @@ window.onload = function () {
     if (file) {
       reader.readAsDataURL(file);
     }
-
-    downloadBtn.addEventListener('click', function () {
-      // aタグを作成してclickイベントを発生させることで、キャンバス内容を画像としてダウンロード
-      let a = document.createElement('a');
-      a.href = canvas.toDataURL('image/jpeg');
-      let fileNameWithoutExtension = file.name.split('.')[0];
-      a.download = fileNameWithoutExtension + '-frame.jpeg';
-      a.click();
-    });
   }, false);
+
+  downloadBtn.addEventListener('click', function () {
+    // aタグを作成してclickイベントを発生させることで、キャンバス内容を画像としてダウンロード
+    let a = document.createElement('a');
+    a.href = canvas.toDataURL('image/jpeg');
+    let fileNameWithoutExtension = file.name.split('.')[0];
+    a.download = fileNameWithoutExtension + '-frame.jpeg';
+    a.click();
+  });
 
   fixInfoBtn.addEventListener('click', function () {
     let inputs = {
