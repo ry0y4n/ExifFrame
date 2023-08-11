@@ -80,6 +80,9 @@ window.onload = function () {
     if (file) {
       reader.readAsDataURL(file);
     }
+
+    // ダウンロードボタンを有効化
+    downloadBtn.disabled = false;
   }, false);
 
   downloadBtn.addEventListener('click', function () {
