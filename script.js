@@ -18,8 +18,9 @@ window.onload = function () {
   const ctx = canvas.getContext('2d');
 
   // 結果表示・修正フォーム関連
-  const modelInput = document.getElementById('modelInput');
   const makeInput = document.getElementById('makeInput');
+  const modelInput = document.getElementById('modelInput');
+  const lensInput = document.getElementById('lensInput');
   const focalLengthIn35mmFilmInput = document.getElementById('focalLengthIn35mmFilmInput');
   const fNumberInput = document.getElementById('fNumberInput');
   const exposureTimeInput = document.getElementById('exposureTimeInput');
@@ -53,6 +54,11 @@ window.onload = function () {
 
         // EXIF情報を取得
         let exifData = {};
+        // レンズ情報を取得するためにExif.jsのタグを追加
+        EXIF.Tags[0xA432]="LensSpecification";
+        EXIF.Tags[0xA433]="LensMake";
+        EXIF.Tags[0xA434]="LensModel";
+        EXIF.Tags[0xA435]="LensSerialNumber";
         EXIF.getData(img, function () {
           exifData = EXIF.getAllTags(this);
         });
@@ -86,8 +92,9 @@ window.onload = function () {
 
   fixInfoBtn.addEventListener('click', function () {
     exifData = {
-      Model: modelInput.value,
       Make: makeInput.value,
+      Model: modelInput.value,
+      LensModel: lensInput.value,
       FocalLengthIn35mmFilm: focalLengthIn35mmFilmInput.value,
       FNumber: fNumberInput.value,
       ExposureTimeString: exposureTimeInput.value,
@@ -129,6 +136,9 @@ window.onload = function () {
   }
 
   function draw(exifData) {
+    let text1 = '';
+    let text2 = '';
+    let text3 = '';
     // 画像に応じたマージンやフォントサイズを計算
     const HORIZONTAL_MARGIN = imgData.width * 0.025;  // 余白の大きさ
     const BOTTOM_MARGIN = imgData.width > imgData.height ? imgData.height * 0.25 : imgData.width * 0.17;  // 下部の余白の大きさ
@@ -155,9 +165,12 @@ window.onload = function () {
     let textCenter = canvas.height - BOTTOM_MARGIN / 2 // 下の余白の中央位置
 
     // 一部のテキストを太字にするための準備
-    let text1 = 'Shot on ';
-    let text2 = exifData.Model + '  ';
-    let text3 = exifData.Make;
+    text1 = exifData.Make + '  ';
+    text2 = exifData.Model;
+    if ("LensModel" in exifData) {
+      text2 += '  /  ';
+      text3 = exifData.LensModel;
+    }
     let text1Width = ctx.measureText(text1).width;
     let text2Width = ctx.measureText(text2).width;
     let textStart = canvas.width / 2 - (text1Width + text2Width + ctx.measureText(text3).width) / 2;
@@ -177,8 +190,9 @@ window.onload = function () {
     let finalText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
 
     // フォームに反映
-    modelInput.value = exifData.Model;
     makeInput.value = exifData.Make;
+    modelInput.value = exifData.Model;
+    lensInput.value = exifData.LensModel != undefined ? exifData.LensModel : '';
     focalLengthIn35mmFilmInput.value = focalLengthText.replace('mm ', '');
     fNumberInput.value = fNumberText.replace('f/', '').replace(' ', '');
     exposureTimeInput.value = exposureTimeText.replace('s ', '');
@@ -186,12 +200,14 @@ window.onload = function () {
 
     // テキスト描画
     let textHeight = finalText ? textCenter - LINE_SPACING : textCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
+    ctx.fillStyle = '#000000';  // 文字色
     ctx.fillText(text1, textStart, textHeight);
     ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
     ctx.fillStyle = '#000000';  // 文字色
     ctx.fillText(text2, textStart + text1Width, textHeight);
-    ctx.font = '500 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を戻す
-    ctx.fillStyle = '#343434';  // 文字色
+    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を戻す
+    // ctx.fillStyle = '#343434';  // 文字色
     ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
 
     ctx.textAlign = 'center';  // 水平中央揃え
