@@ -91,7 +91,7 @@ window.onload = function () {
   }, false);
 
   fixInfoBtn.addEventListener('click', function () {
-    exifData = {
+    let inputs = {
       Make: makeInput.value,
       Model: modelInput.value,
       LensModel: lensInput.value,
@@ -99,6 +99,15 @@ window.onload = function () {
       FNumber: fNumberInput.value,
       ExposureTimeString: exposureTimeInput.value,
       ISOSpeedRatings: isoSpeedRatingsInput.value
+    };
+    
+    exifData = {};
+    
+    for (let key in inputs) {
+      let trimed_input = inputs[key].trim()
+      if (trimed_input !== "") {
+        exifData[key] = trimed_input;
+      }
     }
     toggleImageDisplay();
     draw(exifData)
@@ -165,11 +174,14 @@ window.onload = function () {
     let textCenter = canvas.height - BOTTOM_MARGIN / 2 // 下の余白の中央位置
 
     // 一部のテキストを太字にするための準備
-    text1 = exifData.Make + '  ';
-    text2 = exifData.Model;
+    if ("Make" in exifData) {
+      text1 = exifData.Make;
+    }
+    if ("Model" in exifData) {
+      text2 = '  ' + exifData.Model;
+    }
     if ("LensModel" in exifData) {
-      text2 += '  /  ';
-      text3 = exifData.LensModel;
+      text3 = '  /  ' + exifData.LensModel;
     }
     let text1Width = ctx.measureText(text1).width;
     let text2Width = ctx.measureText(text2).width;
@@ -190,9 +202,9 @@ window.onload = function () {
     let finalText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
 
     // フォームに反映
-    makeInput.value = exifData.Make;
-    modelInput.value = exifData.Model;
-    lensInput.value = exifData.LensModel != undefined ? exifData.LensModel : '';
+    makeInput.value = "Make" in exifData ? exifData.Make : '';
+    modelInput.value = "Model" in exifData ? exifData.Model : '';
+    lensInput.value = "LensModel" in exifData ? exifData.LensModel : '';
     focalLengthIn35mmFilmInput.value = focalLengthText.replace('mm ', '');
     fNumberInput.value = fNumberText.replace('f/', '').replace(' ', '');
     exposureTimeInput.value = exposureTimeText.replace('s ', '');
