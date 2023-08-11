@@ -175,13 +175,13 @@ window.onload = function () {
 
     // 一部のテキストを太字にするための準備
     if ("Make" in exifData) {
-      text1 = exifData.Make;
+      text1 = exifData.Make.replace(/\u0000/g, '');
     }
     if ("Model" in exifData) {
-      text2 = '  ' + exifData.Model;
+      text2 = '  ' + exifData.Model.replace(/\u0000/g, '');
     }
     if ("LensModel" in exifData) {
-      text3 = '  /  ' + exifData.LensModel;
+      text3 = '  /  ' + exifData.LensModel.replace(/\u0000/g, '');
     }
     let text1Width = ctx.measureText(text1).width;
     let text2Width = ctx.measureText(text2).width;
