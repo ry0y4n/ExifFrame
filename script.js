@@ -176,7 +176,7 @@ window.onload = function () {
 
     let upperText = '';
 
-    // 一部のテキストを太字にするための準備
+    // 1行目のテキスト情報取得
     if ("Make" in exifData) {
       upperText = exifData.Make.replace(/\u0000/g, '');
     }
@@ -199,7 +199,7 @@ window.onload = function () {
     let fNumberText = exifData.FNumber ? `f/${exifData.FNumber} ` : '';
     let exposureTimeText = exposureTime ? `${exposureTime}s ` : '';
     let isoSpeedRatingsText = exifData.ISOSpeedRatings ? `ISO${exifData.ISOSpeedRatings}` : '';
-    let finalText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
+    let lowerText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
 
     // フォームに反映
     makeInput.value = "Make" in exifData ? exifData.Make : '';
@@ -211,7 +211,7 @@ window.onload = function () {
     isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
     // テキスト描画
-    let upperTextHeight = finalText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+    let upperTextHeight = lowerText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
     ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
     ctx.fillStyle = '#000000';  // 文字色
     ctx.textAlign = 'center';  // 水平中央揃え
@@ -219,7 +219,7 @@ window.onload = function () {
 
     ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY;  // フォントの設定
     ctx.fillStyle = '#747474';  // 文字色
-    ctx.fillText(finalText, canvas.width / 2, textVerticalCenter + LINE_SPACING + BASE_FONT_SIZE);
+    ctx.fillText(lowerText, canvas.width / 2, textVerticalCenter + LINE_SPACING + BASE_FONT_SIZE);
 
     // 画像の描画処理
     let result = canvas.toDataURL();
