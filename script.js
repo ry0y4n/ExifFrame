@@ -178,15 +178,12 @@ window.onload = function () {
 
     // 一部のテキストを太字にするための準備
     if ("Make" in exifData) {
-      // text1 = exifData.Make.replace(/\u0000/g, '');
       upperText = exifData.Make.replace(/\u0000/g, '');
     }
     if ("Model" in exifData) {
-      // text2 = '  ' + exifData.Model.replace(/\u0000/g, '');
       upperText += '  ' + exifData.Model.replace(/\u0000/g, '');
     }
     if ("LensModel" in exifData) {
-      // text3 = '  /  ' + exifData.LensModel.replace(/\u0000/g, '');
       upperText += '  /  ' + exifData.LensModel.replace(/\u0000/g, '');
     }
 
