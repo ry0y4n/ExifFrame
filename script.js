@@ -149,9 +149,6 @@ window.onload = function () {
   }
 
   function draw(exifData) {
-    let text1 = '';
-    let text2 = '';
-    let text3 = '';
     // 画像に応じたマージンやフォントサイズを計算
     const BASE_MARGIN = imgData.width * 0.025;  // 余白の大きさ
     const BOTTOM_MARGIN = imgData.width > imgData.height ? imgData.height * 0.25 : imgData.width * 0.17;  // 下部の余白の大きさ
@@ -177,19 +174,21 @@ window.onload = function () {
     ctx.textBaseline = 'middle';  // 垂直中央揃え
     let textVerticalCenter = canvas.height - (BOTTOM_MARGIN + BASE_MARGIN) / 2 // 下の余白の中央位置
 
+    let upperText = '';
+
     // 一部のテキストを太字にするための準備
     if ("Make" in exifData) {
-      text1 = exifData.Make.replace(/\u0000/g, '');
+      // text1 = exifData.Make.replace(/\u0000/g, '');
+      upperText = exifData.Make.replace(/\u0000/g, '');
     }
     if ("Model" in exifData) {
-      text2 = '  ' + exifData.Model.replace(/\u0000/g, '');
+      // text2 = '  ' + exifData.Model.replace(/\u0000/g, '');
+      upperText += '  ' + exifData.Model.replace(/\u0000/g, '');
     }
     if ("LensModel" in exifData) {
-      text3 = '  /  ' + exifData.LensModel.replace(/\u0000/g, '');
+      // text3 = '  /  ' + exifData.LensModel.replace(/\u0000/g, '');
+      upperText += '  /  ' + exifData.LensModel.replace(/\u0000/g, '');
     }
-    let text1Width = ctx.measureText(text1).width;
-    let text2Width = ctx.measureText(text2).width;
-    let textStart = canvas.width / 2 - (text1Width + text2Width + ctx.measureText(text3).width) / 2;
 
     // 2行目のテキスト情報取得
     let exposureTime;
@@ -215,18 +214,12 @@ window.onload = function () {
     isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
     // テキスト描画
-    let textHeight = finalText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+    let upperTextHeight = finalText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
     ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
     ctx.fillStyle = '#000000';  // 文字色
-    ctx.fillText(text1, textStart, textHeight);
-    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
-    ctx.fillStyle = '#000000';  // 文字色
-    ctx.fillText(text2, textStart + text1Width, textHeight);
-    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を戻す
-    // ctx.fillStyle = '#343434';  // 文字色
-    ctx.fillText(text3, textStart + text1Width + text2Width, textHeight);
-
     ctx.textAlign = 'center';  // 水平中央揃え
+    ctx.fillText(upperText, canvas.width / 2, upperTextHeight);
+
     ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY;  // フォントの設定
     ctx.fillStyle = '#747474';  // 文字色
     ctx.fillText(finalText, canvas.width / 2, textVerticalCenter + LINE_SPACING + BASE_FONT_SIZE);
