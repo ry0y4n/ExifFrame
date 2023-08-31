@@ -153,29 +153,29 @@ window.onload = function () {
     let text2 = '';
     let text3 = '';
     // 画像に応じたマージンやフォントサイズを計算
-    const HORIZONTAL_MARGIN = imgData.width * 0.025;  // 余白の大きさ
+    const BASE_MARGIN = imgData.width * 0.025;  // 余白の大きさ
     const BOTTOM_MARGIN = imgData.width > imgData.height ? imgData.height * 0.25 : imgData.width * 0.17;  // 下部の余白の大きさ
     const BASE_FONT_SIZE = imgData.width > imgData.height ? imgData.height * 0.0275 : imgData.width * 0.02  // ベースとなるフォントサイズ
     const FONT_FAMILY = 'Inter, sans-serif' // フォント
     const LINE_SPACING = imgData.width > imgData.height ? imgData.height * 0.005 : imgData.width * 0.0045;  // 行間
 
     // キャンバスサイズを画像サイズ＋枠分に設定
-    canvas.width = imgData.width + HORIZONTAL_MARGIN * 2;
-    canvas.height = imgData.height + BOTTOM_MARGIN;
+    canvas.width = imgData.width + BASE_MARGIN * 2;
+    canvas.height = imgData.height + BASE_MARGIN +  BOTTOM_MARGIN;
 
     // 白い背景を描画
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // 画像を描画（余白の分だけずらして描画）
-    ctx.drawImage(imgData, HORIZONTAL_MARGIN, HORIZONTAL_MARGIN, imgData.width, imgData.height);
+    ctx.drawImage(imgData, BASE_MARGIN, BASE_MARGIN, imgData.width, imgData.height);
 
     // テキストを描画（下部の余白に）
     ctx.fillStyle = '#747474';  // 文字色
     ctx.font = '400 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定
     // ctx.textAlign = 'center';  // 水平中央揃え
     ctx.textBaseline = 'middle';  // 垂直中央揃え
-    let textCenter = canvas.height - BOTTOM_MARGIN / 2 // 下の余白の中央位置
+    let textVerticalCenter = canvas.height - (BOTTOM_MARGIN + BASE_MARGIN) / 2 // 下の余白の中央位置
 
     // 一部のテキストを太字にするための準備
     if ("Make" in exifData) {
@@ -215,7 +215,7 @@ window.onload = function () {
     isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
     // テキスト描画
-    let textHeight = finalText ? textCenter - LINE_SPACING : textCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+    let textHeight = finalText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
     ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
     ctx.fillStyle = '#000000';  // 文字色
     ctx.fillText(text1, textStart, textHeight);
@@ -229,7 +229,7 @@ window.onload = function () {
     ctx.textAlign = 'center';  // 水平中央揃え
     ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY;  // フォントの設定
     ctx.fillStyle = '#747474';  // 文字色
-    ctx.fillText(finalText, canvas.width / 2, textCenter + LINE_SPACING + BASE_FONT_SIZE);
+    ctx.fillText(finalText, canvas.width / 2, textVerticalCenter + LINE_SPACING + BASE_FONT_SIZE);
 
     // 画像の描画処理
     let result = canvas.toDataURL();
