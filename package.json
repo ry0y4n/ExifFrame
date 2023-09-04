@@ -11,7 +11,9 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*": "npm run lint"
+    "*.js": "eslint",
+    "*.css": "stylelint",
+    "*.html": "markuplint"
   },
   "repository": {
     "type": "git",
