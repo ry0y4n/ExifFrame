@@ -105,7 +105,7 @@ window.onload = function () {
       ISOSpeedRatings: isoSpeedRatingsInput.value
     };
     
-    exifData = {};
+    let exifData = {};
     
     for (let key in inputs) {
       let trimed_input = inputs[key].trim()
