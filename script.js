@@ -36,54 +36,55 @@ window.onload = function () {
     fileInput.click();
   });
 
-  fileInput.addEventListener('change', function (e) {
+  fileInput.addEventListener(
+    'change',
+    function (e) {
+      // サンプルコンテンツを非表示にしてローディング画面を表示
+      sampleContent.style.display = 'none';
+      toggleImageDisplay();
+      toggleLoading();
 
-    // サンプルコンテンツを非表示にしてローディング画面を表示
-    sampleContent.style.display = 'none';
-    toggleImageDisplay();
-    toggleLoading();
+      file = e.target.files[0];
+      let reader = new FileReader();
 
-    file = e.target.files[0];
-    let reader = new FileReader();
+      reader.onloadend = function () {
+        let img = new Image();
+        img.onload = function () {
+          // 修正用に元画像を変数に保存
+          imgData = img;
 
-    reader.onloadend = function () {
-      let img = new Image();
-      img.onload = function () {
-
-        // 修正用に元画像を変数に保存
-        imgData = img;
-
-        // EXIF情報を取得
-        let exifData = {};
-        // レンズ情報を取得するためにExif.jsのタグを追加
-        EXIF.Tags[0xA432]='LensSpecification';
-        EXIF.Tags[0xA433]='LensMake';
-        EXIF.Tags[0xA434]='LensModel';
-        EXIF.Tags[0xA435]='LensSerialNumber';
-        EXIF.getData(img, function () {
-          exifData = EXIF.getAllTags(this);
-        });
-
-        // フォント読み込みとテキストの描画（フォントの二重読み込み防止処理）
-        if (isFontsLoaded) {
-          draw(exifData);
-        } else {
-          loadFonts().then(function () {
-            draw(exifData);
+          // EXIF情報を取得
+          let exifData = {};
+          // レンズ情報を取得するためにExif.jsのタグを追加
+          EXIF.Tags[0xa432] = 'LensSpecification';
+          EXIF.Tags[0xa433] = 'LensMake';
+          EXIF.Tags[0xa434] = 'LensModel';
+          EXIF.Tags[0xa435] = 'LensSerialNumber';
+          EXIF.getData(img, function () {
+            exifData = EXIF.getAllTags(this);
           });
-        }
 
+          // フォント読み込みとテキストの描画（フォントの二重読み込み防止処理）
+          if (isFontsLoaded) {
+            draw(exifData);
+          } else {
+            loadFonts().then(function () {
+              draw(exifData);
+            });
+          }
+        };
+        img.src = reader.result;
       };
-      img.src = reader.result;
-    };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+      if (file) {
+        reader.readAsDataURL(file);
+      }
 
-    // ダウンロードボタンを有効化
-    downloadBtn.disabled = false;
-  }, false);
+      // ダウンロードボタンを有効化
+      downloadBtn.disabled = false;
+    },
+    false,
+  );
 
   downloadBtn.addEventListener('click', function () {
     // aタグを作成してclickイベントを発生させることで、キャンバス内容を画像としてダウンロード
@@ -102,11 +103,11 @@ window.onload = function () {
       FocalLengthIn35mmFilm: focalLengthIn35mmFilmInput.value,
       FNumber: fNumberInput.value,
       ExposureTimeString: exposureTimeInput.value,
-      ISOSpeedRatings: isoSpeedRatingsInput.value
+      ISOSpeedRatings: isoSpeedRatingsInput.value,
     };
-    
+
     let exifData = {};
-    
+
     for (let key in inputs) {
       let trimed_input = inputs[key].trim();
       if (trimed_input !== '') {
@@ -136,13 +137,14 @@ window.onload = function () {
     const fontInter500 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-500.woff2)', { weight: '500' });
     const fontInter700 = new FontFace('Inter', 'url(./fonts/inter-v12-latin-700.woff2)', { weight: '700' });
 
-    return Promise.all([fontInter400.load(), fontInter500.load(), fontInter700.load()]).then(function (loadedFonts) {
-      loadedFonts.forEach(function (loadedFont) {
-        document.fonts.add(loadedFont);
-      });
+    return Promise.all([fontInter400.load(), fontInter500.load(), fontInter700.load()])
+      .then(function (loadedFonts) {
+        loadedFonts.forEach(function (loadedFont) {
+          document.fonts.add(loadedFont);
+        });
 
-      isFontsLoaded = true;
-    })
+        isFontsLoaded = true;
+      })
       .catch(function (error) {
         alert('フォントの読み込みに失敗しました: ' + error);
       });
@@ -150,21 +152,15 @@ window.onload = function () {
 
   function draw(exifData) {
     // 画像に応じたマージンやフォントサイズを計算
-    const BASE_MARGIN = imgData.width * 0.025;  // 余白の大きさ
-    const BOTTOM_MARGIN = imgData.width > imgData.height
-      ? imgData.height * 0.25
-      : imgData.width * 0.17;  // 下部の余白の大きさ
-    const BASE_FONT_SIZE = imgData.width > imgData.height
-      ? imgData.height * 0.0275
-      : imgData.width * 0.02;  // ベースとなるフォントサイズ
+    const BASE_MARGIN = imgData.width * 0.025; // 余白の大きさ
+    const BOTTOM_MARGIN = imgData.width > imgData.height ? imgData.height * 0.25 : imgData.width * 0.17; // 下部の余白の大きさ
+    const BASE_FONT_SIZE = imgData.width > imgData.height ? imgData.height * 0.0275 : imgData.width * 0.02; // ベースとなるフォントサイズ
     const FONT_FAMILY = 'Inter, sans-serif'; // フォント
-    const LINE_SPACING = imgData.width > imgData.height
-      ? imgData.height * 0.005
-      : imgData.width * 0.0045;  // 行間
+    const LINE_SPACING = imgData.width > imgData.height ? imgData.height * 0.005 : imgData.width * 0.0045; // 行間
 
     // キャンバスサイズを画像サイズ＋枠分に設定
     canvas.width = imgData.width + BASE_MARGIN * 2;
-    canvas.height = imgData.height + BASE_MARGIN +  BOTTOM_MARGIN;
+    canvas.height = imgData.height + BASE_MARGIN + BOTTOM_MARGIN;
 
     // 白い背景を描画
     ctx.fillStyle = '#ffffff';
@@ -174,10 +170,10 @@ window.onload = function () {
     ctx.drawImage(imgData, BASE_MARGIN, BASE_MARGIN, imgData.width, imgData.height);
 
     // テキストを描画（下部の余白に）
-    ctx.fillStyle = '#747474';  // 文字色
-    ctx.font = '400 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定
+    ctx.fillStyle = '#747474'; // 文字色
+    ctx.font = '400 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY; // フォントの設定
     // ctx.textAlign = 'center';  // 水平中央揃え
-    ctx.textBaseline = 'middle';  // 垂直中央揃え
+    ctx.textBaseline = 'middle'; // 垂直中央揃え
     let textVerticalCenter = canvas.height - (BOTTOM_MARGIN + BASE_MARGIN) / 2; // 下の余白の中央位置
 
     let upperText = '';
@@ -196,53 +192,35 @@ window.onload = function () {
     // 2行目のテキスト情報取得
     let exposureTime;
     if (exifData.ExposureTime != undefined) {
-      exposureTime = exifData.ExposureTime >= 1
-        ? exifData.ExposureTime
-        : `1/${Math.round(1 / exifData.ExposureTime)}`;
+      exposureTime = exifData.ExposureTime >= 1 ? exifData.ExposureTime : `1/${Math.round(1 / exifData.ExposureTime)}`;
     } else {
       exposureTime = exifData.ExposureTimeString;
     }
 
-    let focalLengthText = exifData.FocalLengthIn35mmFilm
-      ? `${exifData.FocalLengthIn35mmFilm}mm `
-      : '';
-    let fNumberText = exifData.FNumber
-      ? `f/${exifData.FNumber} `
-      : '';
-    let exposureTimeText = exposureTime
-      ? `${exposureTime}s `
-      : '';
-    let isoSpeedRatingsText = exifData.ISOSpeedRatings
-      ? `ISO${exifData.ISOSpeedRatings}`
-      : '';
+    let focalLengthText = exifData.FocalLengthIn35mmFilm ? `${exifData.FocalLengthIn35mmFilm}mm ` : '';
+    let fNumberText = exifData.FNumber ? `f/${exifData.FNumber} ` : '';
+    let exposureTimeText = exposureTime ? `${exposureTime}s ` : '';
+    let isoSpeedRatingsText = exifData.ISOSpeedRatings ? `ISO${exifData.ISOSpeedRatings}` : '';
     let lowerText = focalLengthText + fNumberText + exposureTimeText + isoSpeedRatingsText;
 
     // フォームに反映
-    makeInput.value = 'Make' in exifData
-      ? exifData.Make
-      : '';
-    modelInput.value = 'Model' in exifData
-      ? exifData.Model
-      : '';
-    lensInput.value = 'LensModel' in exifData
-      ? exifData.LensModel
-      : '';
+    makeInput.value = 'Make' in exifData ? exifData.Make : '';
+    modelInput.value = 'Model' in exifData ? exifData.Model : '';
+    lensInput.value = 'LensModel' in exifData ? exifData.LensModel : '';
     focalLengthIn35mmFilmInput.value = focalLengthText.replace('mm ', '');
     fNumberInput.value = fNumberText.replace('f/', '').replace(' ', '');
     exposureTimeInput.value = exposureTimeText.replace('s ', '');
     isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
     // テキスト描画
-    let upperTextHeight = lowerText
-      ? textVerticalCenter - LINE_SPACING
-      : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
-    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY;  // フォントの設定を変更
-    ctx.fillStyle = '#000000';  // 文字色
-    ctx.textAlign = 'center';  // 水平中央揃え
+    let upperTextHeight = lowerText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY; // フォントの設定を変更
+    ctx.fillStyle = '#000000'; // 文字色
+    ctx.textAlign = 'center'; // 水平中央揃え
     ctx.fillText(upperText, canvas.width / 2, upperTextHeight);
 
-    ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY;  // フォントの設定
-    ctx.fillStyle = '#747474';  // 文字色
+    ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY; // フォントの設定
+    ctx.fillStyle = '#747474'; // 文字色
     ctx.fillText(lowerText, canvas.width / 2, textVerticalCenter + LINE_SPACING + BASE_FONT_SIZE);
 
     // 画像の描画処理
@@ -259,15 +237,11 @@ window.onload = function () {
   }
 
   function toggleImageDisplay() {
-    contentsDiv.style.display = isImageDisplayed
-      ? 'none'
-      : 'block';
+    contentsDiv.style.display = isImageDisplayed ? 'none' : 'block';
     isImageDisplayed = !isImageDisplayed;
   }
 
   function toggleLoading(isDisplay = true) {
-    loadingDiv.style.display = isDisplay
-      ? 'flex'
-      : 'none';
+    loadingDiv.style.display = isDisplay ? 'flex' : 'none';
   }
 };

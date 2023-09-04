@@ -1,5 +1,5 @@
 body {
-  color: #FFF;
+  color: #fff;
 }
 
 .terms-content {
@@ -24,8 +24,8 @@ body {
 
 .terms-content__link {
   line-height: 30px;
-  color: #AAA;
-  word-wrap:break-word;
+  color: #aaa;
+  word-wrap: break-word;
 }
 
 .back-to-top {
@@ -35,7 +35,7 @@ body {
 .back-to-top__link {
   font-size: 12px;
   font-weight: bold;
-  color: #FFF;
+  color: #fff;
 }
 
 @media screen and (max-width: 480px) {

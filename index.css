@@ -8,7 +8,7 @@
   padding: 5px;
   font-size: 12px;
   font-weight: bold;
-  color: #D8FF91;
+  color: #d8ff91;
   background-color: #555;
   border: 0;
   border-radius: 3px;
@@ -23,7 +23,7 @@
 }
 
 .header__icon {
-  width: 200px
+  width: 200px;
 }
 
 /* ブロック単位 */
@@ -98,7 +98,7 @@
 }
 
 .footer__link-to-terms {
-  color: #AAA;
+  color: #aaa;
 }
 
 /* スマホ用 */
