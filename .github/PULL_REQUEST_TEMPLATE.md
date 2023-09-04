@@ -25,24 +25,24 @@ What kind of change does this PR introduce?
 
 ## What I Did
 
-* What has been done in this Pull Request?
+- What has been done in this Pull Request?
 
 ## What I Didn't Do
 
-* What won't be done in this Pull Request? (If applicable, otherwise state "None"). If not, when will it be done?
+- What won't be done in this Pull Request? (If applicable, otherwise state "None"). If not, when will it be done?
 
 ## What Becomes Possible (User Perspective)
 
-* What can the user now do? (If applicable, otherwise state "None")
+- What can the user now do? (If applicable, otherwise state "None")
 
 ## What Becomes Impossible (User Perspective)
 
-* What can the user no longer do? (If applicable, otherwise state "None")
+- What can the user no longer do? (If applicable, otherwise state "None")
 
 ## How I Tested
 
-* What kind of testing was performed? What were the results?
+- What kind of testing was performed? What were the results?
 
 ## Additional Information
 
-* Any additional information for the reviewer? (Include any concerns or points of note if applicable)
+- Any additional information for the reviewer? (Include any concerns or points of note if applicable)

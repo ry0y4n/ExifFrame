@@ -1,6 +1,6 @@
 body {
+  color: #aaa;
   background-color: #303030;
-  color: #AAA;
 }
 
 div {
@@ -12,9 +12,9 @@ div {
 }
 
 .footer {
-  font-size: 10px;
   position: sticky;
-  text-align: center;
   top: 100vh;
   width: 100%;
+  font-size: 10px;
+  text-align: center;
 }

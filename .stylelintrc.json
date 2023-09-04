@@ -1,5 +1,5 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
   "rules": {
     "selector-class-pattern": "^[a-z][a-z-]*(__[a-z][a-z-]*)?(--[a-z][a-z-]*)?$",
     "media-feature-range-notation": "prefix",

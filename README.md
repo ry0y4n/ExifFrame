@@ -34,6 +34,7 @@ npm install
 ```
 
 ローカルサーバー立ち上げ
+
 ```
 # python 2.X
 $ python -m SimpleHTTPServer 8080

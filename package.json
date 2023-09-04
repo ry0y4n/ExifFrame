@@ -5,8 +5,12 @@
   "main": "script.js",
   "scripts": {
     "lint:html": "markuplint \"*.html\"",
+    "lint:html --fix": "markuplint \"*.html\" --fix",
     "lint:css": "stylelint \"*.css\"",
+    "lint:css --fix": "stylelint \"*.css\" --fix",
     "lint:eslint": "eslint \"*.js\"",
+    "lint:eslint --fix": "eslint \"*.js\" --fix",
+    "lint:prettier": "prettier --write .",
     "lint": "run-p lint:*",
     "prepare": "husky install"
   },
@@ -32,7 +36,9 @@
     "lint-staged": "^14.0.1",
     "markuplint": "^3.12.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^3.0.3",
     "stylelint": "15.10.3",
+    "stylelint-config-recess-order": "^4.3.0",
     "stylelint-config-standard": "34.0.0"
   }
 }

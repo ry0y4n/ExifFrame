@@ -1,15 +1,15 @@
 body {
-  color: #FFF;
+  color: #fff;
 }
 
 .terms-content {
-  margin: 0 auto;
   width: 600px;
+  margin: 0 auto;
 }
 
 .terms-content__title {
-  font-size: 20px;
   margin: 50px;
+  font-size: 20px;
 }
 
 .terms-content__text {
@@ -18,14 +18,14 @@ body {
 }
 
 .terms-content__list {
-  font-size: 12px;
   margin: 30px 0;
+  font-size: 12px;
 }
 
 .terms-content__link {
-  color: #AAA;
   line-height: 30px;
-  word-wrap:break-word;
+  color: #aaa;
+  word-wrap: break-word;
 }
 
 .back-to-top {
@@ -33,9 +33,9 @@ body {
 }
 
 .back-to-top__link {
-  color: #FFF;
   font-size: 12px;
   font-weight: bold;
+  color: #fff;
 }
 
 @media screen and (max-width: 480px) {
