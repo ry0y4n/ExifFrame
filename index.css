@@ -5,7 +5,7 @@
 
 .button {
   background-color: #555;
-  border: 0px;
+  border: 0;
   border-radius: 3px;
   color: #D8FF91;
   font-size: 12px;
@@ -103,7 +103,6 @@
 
 /* スマホ用 */
 @media screen and (max-width: 480px) {
-
   .responsive {
     display: block;
   }

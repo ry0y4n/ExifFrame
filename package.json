@@ -4,7 +4,8 @@
   "description": "写真にフレームを追加しExif情報を表示・編集するウェブアプリです",
   "main": "script.js",
   "scripts": {
-    "lint:html": "markuplint \"**/*.html\""
+    "lint:html": "markuplint \"**/*.html\"",
+    "lint:css": "stylelint \"**/*.css\""
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/ry0y4n/ExifFrame/issues"
   },
-  "homepage": "https://github.com/ry0y4n/ExifFrame#readme"
+  "homepage": "https://github.com/ry0y4n/ExifFrame#readme",
+  "devDependencies": {
+    "markuplint": "^3.12.0",
+    "stylelint": "15.10.3",
+    "stylelint-config-standard": "34.0.0"
+  }
 }
