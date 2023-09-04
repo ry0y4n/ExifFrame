@@ -23,6 +23,31 @@ ExifFrameは，画像に白枠フレームを追加し，Exif情報をフレー�
 4. Exif情報を編集したい場合は，画面下部の入力欄に新しい情報を入力し，`修正`ボタンをクリックします
 5. `ダウンロード`ボタンをクリックして，加工後の画像をダウンロードします
 
+## 開発方法
+
+セットアップ
+
+```
+git clone https://github.com/ry0y4n/ExifFrame.git
+cd ExifFrame
+npm install
+```
+
+ローカルサーバー立ち上げ
+```
+# python 2.X
+$ python -m SimpleHTTPServer 8080
+
+# python 3.X
+$ python -m http.server 8080
+
+# ruby
+$ ruby -run -e httpd . -p 8080
+
+# php
+$ php -S localhost:8080
+```
+
 ## 必要な環境
 
 - Webブラウザ（Chrome, Firefox, Safari等）
