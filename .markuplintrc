@@ -1,0 +1,43 @@
+{
+  "rules": {
+    "attr-value-quotes": false,
+    "case-sensitive-tag-name": false,
+    "no-refer-to-non-existent-id": true,
+    "attr-duplication": true,
+    "deprecated-element": true,
+    "require-datetime": true,
+    "doctype": "always",
+    "case-sensitive-attr-name": false,
+    "no-hard-code-id": false,
+    "disallowed-element": true,
+    "use-list": false,
+    "wai-aria": true,
+    "permitted-contents": true,
+    "require-accessible-name": false,
+    "no-empty-palpable-content": false,
+    "id-duplication": true,
+    "end-tag": false,
+    "required-element": true,
+    "deprecated-attr": true,
+    "label-has-control": false,
+    "ineffective-attr": false,
+    "required-h1": false,
+    "no-use-event-handler-attr": false,
+    "no-boolean-attr-value": false,
+    "placeholder-label-option": true,
+    "no-default-value": false,
+    "character-reference": true,
+    "landmark-roles": false,
+    "class-naming": false,
+    "invalid-attr": {
+      "options": {
+        "allowAttrs": [
+          "property",
+          "content",
+          "prefix"
+        ]
+      }
+    },
+    "required-attr": false
+  }
+}

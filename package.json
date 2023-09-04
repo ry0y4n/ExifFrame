@@ -1,0 +1,20 @@
+{
+  "name": "exif-frame-web",
+  "version": "1.0.0",
+  "description": "写真にフレームを追加しExif情報を表示・編集するウェブアプリです",
+  "main": "script.js",
+  "scripts": {
+    "lint:html": "markuplint \"**/*.html\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ry0y4n/ExifFrame.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ry0y4n/ExifFrame/issues"
+  },
+  "homepage": "https://github.com/ry0y4n/ExifFrame#readme"
+}
