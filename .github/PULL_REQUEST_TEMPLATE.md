@@ -23,6 +23,8 @@ What kind of change does this PR introduce?
 [ ] Other
 ```
 
+> If you submit a PR that may affect the downloaded image in any way, be sure to run `npm run playwright` to check the results.
+
 ## What I Did
 
 - What has been done in this Pull Request?
