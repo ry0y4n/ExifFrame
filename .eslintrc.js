@@ -12,6 +12,7 @@ module.exports = {
   },
   globals: {
     EXIF: 'readonly',
+    process: 'readonly',
   },
   rules: {
     'no-control-regex': 'off', // 正規表現で制御文字を使用可能にする
