@@ -2,6 +2,8 @@ import { test } from '@playwright/test';
 
 for (let i = 1; i < 5; i++) {
   test(`upload & download image: part${i}`, async ({ page }) => {
+    test.setTimeout(10000);
+
     await page.goto('http://127.0.0.1:5500/index.html');
 
     // Upload image
