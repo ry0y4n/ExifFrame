@@ -12,7 +12,8 @@
     "lint:eslint --fix": "eslint \"*.js\" --fix",
     "lint:prettier": "prettier --write .",
     "lint": "run-p lint:*",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "playwright": "playwright test"
   },
   "lint-staged": {
     "*.js": "eslint",
@@ -31,6 +32,7 @@
   },
   "homepage": "https://github.com/ry0y4n/ExifFrame#readme",
   "devDependencies": {
+    "@playwright/test": "^1.37.1",
     "eslint": "^8.48.0",
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
