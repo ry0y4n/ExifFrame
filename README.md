@@ -25,7 +25,7 @@ ExifFrameは，画像に白枠フレームを追加し，Exif情報をフレー�
 
 ## 開発方法
 
-セットアップ
+### セットアップ
 
 ```
 git clone https://github.com/ry0y4n/ExifFrame.git
@@ -33,7 +33,7 @@ cd ExifFrame
 npm install
 ```
 
-ローカルサーバー立ち上げ
+### ローカルサーバー立ち上げ
 
 ```
 # python 2.X
@@ -47,6 +47,12 @@ $ ruby -run -e httpd . -p 8080
 
 # php
 $ php -S localhost:8080
+```
+
+### フレーミング後の画像チェック
+
+```
+npm run playwright
 ```
 
 ## 必要な環境
