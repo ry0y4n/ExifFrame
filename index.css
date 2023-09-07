@@ -67,6 +67,58 @@
   width: 600px;
 }
 
+.toggle-button {
+  position: relative;
+  display: inline-block;
+  width: 90px;
+  height: 30px;
+  cursor: pointer;
+  background-color: #ddd;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+
+  .toggle-button__text {
+    position: absolute;
+    top: 5px;
+    left: 30px;
+    width: 50px;
+    height: 10px;
+    margin: 0;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 20px;
+  }
+}
+
+.toggle-button:has(:checked) {
+  background-color: #d8ff91;
+
+  .toggle-button__text {
+    left: 10px;
+  }
+}
+
+.toggle-button::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  content: '';
+  background-color: #fff;
+  border-radius: 20%;
+  box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+  transition: left 0.2s;
+}
+
+.toggle-button:has(:checked)::after {
+  left: 60px;
+}
+
+.toggle-button input {
+  display: none;
+}
+
 .result {
   display: none;
   text-align: center;

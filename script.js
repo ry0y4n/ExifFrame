@@ -27,10 +27,23 @@ window.onload = function () {
   const isoSpeedRatingsInput = document.getElementById('isoSpeedRatingsInput');
   const fixInfoBtn = document.getElementById('fixInfoBtn');
 
+  // 設定関連
+  const framingSquareCheckbox = document.getElementById('framingSquareCheckbox');
+
   let file;
   let imgData = null;
   let isFontsLoaded = false;
-  let isImageDisplayed = true;
+  let isFramingSquare = false;
+
+  framingSquareCheckbox.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      isFramingSquare = true;
+      document.querySelector('.toggle-button__text').innerHTML = '正方形';
+    } else {
+      isFramingSquare = false;
+      document.querySelector('.toggle-button__text').innerHTML = '標準';
+    }
+  });
 
   uploadBtn.addEventListener('click', function () {
     fileInput.click();
@@ -41,8 +54,8 @@ window.onload = function () {
     function (e) {
       // サンプルコンテンツを非表示にしてローディング画面を表示
       sampleContent.style.display = 'none';
-      toggleImageDisplay();
-      toggleLoading();
+      toggleImageDisplay(false);
+      toggleLoading(true);
 
       file = e.target.files[0];
       let reader = new FileReader();
@@ -114,7 +127,7 @@ window.onload = function () {
         exifData[key] = trimed_input;
       }
     }
-    toggleImageDisplay();
+    toggleImageDisplay(false);
     draw(exifData);
   });
 
@@ -152,30 +165,87 @@ window.onload = function () {
 
   function draw(exifData) {
     // 画像に応じたマージンやフォントサイズを計算
-    const BASE_MARGIN = imgData.width * 0.025; // 余白の大きさ
-    const BOTTOM_MARGIN = imgData.width > imgData.height ? imgData.height * 0.25 : imgData.width * 0.17; // 下部の余白の大きさ
+    const { HORIZONTAL_MARGIN, VERTICAL_MARGIN, BOTTOM_MARGIN } = calculateMargin(imgData); // 上下の余白の大きさ
+
     const BASE_FONT_SIZE = imgData.width > imgData.height ? imgData.height * 0.0275 : imgData.width * 0.02; // ベースとなるフォントサイズ
     const FONT_FAMILY = 'Inter, sans-serif'; // フォント
     const LINE_SPACING = imgData.width > imgData.height ? imgData.height * 0.005 : imgData.width * 0.0045; // 行間
 
     // キャンバスサイズを画像サイズ＋枠分に設定
-    canvas.width = imgData.width + BASE_MARGIN * 2;
-    canvas.height = imgData.height + BASE_MARGIN + BOTTOM_MARGIN;
+    canvas.width = imgData.width + HORIZONTAL_MARGIN * 2;
+    canvas.height = imgData.height + VERTICAL_MARGIN * 2 + BOTTOM_MARGIN;
 
     // 白い背景を描画
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // 画像を描画（余白の分だけずらして描画）
-    ctx.drawImage(imgData, BASE_MARGIN, BASE_MARGIN, imgData.width, imgData.height);
+    ctx.drawImage(imgData, HORIZONTAL_MARGIN, VERTICAL_MARGIN, imgData.width, imgData.height);
 
+    const { upperText, lowerText } = createCaption(exifData);
+    // 正方形モードでなければテキストを描画
+    if (!isFramingSquare) {
+      addText(upperText, lowerText, VERTICAL_MARGIN, BOTTOM_MARGIN, BASE_FONT_SIZE, FONT_FAMILY, LINE_SPACING);
+    }
+
+    // 画像の描画処理
+    let result = canvas.toDataURL();
+
+    if (result === 'data:,') {
+      alert('フレームの生成に失敗しました。\n画像の縦幅、横幅を小さくして試してみてください。');
+      return;
+    }
+
+    resultImage.src = result;
+    toggleLoading(false);
+    toggleImageDisplay(true);
+  }
+
+  function calculateMargin(imgData) {
+    if (isFramingSquare) {
+      if (imgData.width > imgData.height) {
+        return {
+          HORIZONTAL_MARGIN: imgData.width * 0.025,
+          VERTICAL_MARGIN: (imgData.width + imgData.width * 0.025 * 2 - imgData.height) / 2,
+          BOTTOM_MARGIN: 0,
+        };
+      } else {
+        return {
+          HORIZONTAL_MARGIN: (imgData.height + imgData.height * 0.025 * 2 - imgData.width) / 2,
+          VERTICAL_MARGIN: imgData.width * 0.025,
+          BOTTOM_MARGIN: 0,
+        };
+      }
+    } else {
+      return {
+        HORIZONTAL_MARGIN: imgData.width * 0.025, // 左右の余白の大きさ
+        VERTICAL_MARGIN: imgData.width * 0.025, // 上下の余白の大きさ
+        BOTTOM_MARGIN: imgData.width > imgData.height ? imgData.height * 0.25 : imgData.width * 0.17, // 下部の余白の大きさ
+      };
+    }
+  }
+
+  function addText(upperText, lowerText, VERTICAL_MARGIN, BOTTOM_MARGIN, BASE_FONT_SIZE, FONT_FAMILY, LINE_SPACING) {
     // テキストを描画（下部の余白に）
     ctx.fillStyle = '#747474'; // 文字色
     ctx.font = '400 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY; // フォントの設定
     // ctx.textAlign = 'center';  // 水平中央揃え
     ctx.textBaseline = 'middle'; // 垂直中央揃え
-    let textVerticalCenter = canvas.height - (BOTTOM_MARGIN + BASE_MARGIN) / 2; // 下の余白の中央位置
+    let textVerticalCenter = canvas.height - (BOTTOM_MARGIN + VERTICAL_MARGIN * 2) / 2; // 下の余白の中央位置
 
+    // テキスト描画
+    let upperTextHeight = lowerText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
+    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY; // フォントの設定を変更
+    ctx.fillStyle = '#000000'; // 文字色
+    ctx.textAlign = 'center'; // 水平中央揃え
+    ctx.fillText(upperText, canvas.width / 2, upperTextHeight);
+
+    ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY; // フォントの設定
+    ctx.fillStyle = '#747474'; // 文字色
+    ctx.fillText(lowerText, canvas.width / 2, textVerticalCenter + LINE_SPACING + BASE_FONT_SIZE);
+  }
+
+  function createCaption(exifData) {
     let upperText = '';
 
     // 1行目のテキスト情報取得
@@ -212,36 +282,17 @@ window.onload = function () {
     exposureTimeInput.value = exposureTimeText.replace('s ', '');
     isoSpeedRatingsInput.value = isoSpeedRatingsText.replace('ISO', '');
 
-    // テキスト描画
-    let upperTextHeight = lowerText ? textVerticalCenter - LINE_SPACING : textVerticalCenter + BASE_FONT_SIZE / 2; // 2行目テキストがある場合は上に、ない場合は中央にずらす
-    ctx.font = '700 ' + BASE_FONT_SIZE + 'px ' + FONT_FAMILY; // フォントの設定を変更
-    ctx.fillStyle = '#000000'; // 文字色
-    ctx.textAlign = 'center'; // 水平中央揃え
-    ctx.fillText(upperText, canvas.width / 2, upperTextHeight);
-
-    ctx.font = '400 ' + BASE_FONT_SIZE * 0.8 + 'px ' + FONT_FAMILY; // フォントの設定
-    ctx.fillStyle = '#747474'; // 文字色
-    ctx.fillText(lowerText, canvas.width / 2, textVerticalCenter + LINE_SPACING + BASE_FONT_SIZE);
-
-    // 画像の描画処理
-    let result = canvas.toDataURL();
-
-    if (result === 'data:,') {
-      alert('フレームの生成に失敗しました。\n画像の縦幅、横幅を小さくして試してみてください。');
-      return;
-    }
-
-    resultImage.src = result;
-    toggleLoading(false);
-    toggleImageDisplay();
+    return {
+      upperText: upperText,
+      lowerText: lowerText,
+    };
   }
 
-  function toggleImageDisplay() {
-    contentsDiv.style.display = isImageDisplayed ? 'none' : 'block';
-    isImageDisplayed = !isImageDisplayed;
+  function toggleImageDisplay(isDisplay) {
+    contentsDiv.style.display = isDisplay ? 'block' : 'none';
   }
 
-  function toggleLoading(isDisplay = true) {
+  function toggleLoading(isDisplay) {
     loadingDiv.style.display = isDisplay ? 'flex' : 'none';
   }
 };

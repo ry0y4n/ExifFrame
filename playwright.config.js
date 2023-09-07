@@ -77,4 +77,8 @@ export default defineConfig({
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
+  webServer: {
+    command: 'python -m http.server 8081',
+    port: 8081,
+  },
 });
