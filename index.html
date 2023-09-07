@@ -21,6 +21,14 @@
     <link rel="stylesheet" href="index.css" />
     <link rel="manifest" href="manifest.json" />
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "firebase/app": "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js",
+          "firebase/remote-config": "https://www.gstatic.com/firebasejs/10.3.1/firebase-remote-config.js"
+        }
+      }
+    </script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0N2GH0PC65"></script>
@@ -40,7 +48,7 @@
       <div class="header">
         <img class="header__icon" src="./assets/icon-with-text.png" />
       </div>
-      <div class="center">
+      <div class="mode-toggle center" id="toggleMode">
         <label class="toggle-button">
           <span class="toggle-button__text">標準</span>
           <input type="checkbox" id="framingSquareCheckbox" />
@@ -94,7 +102,7 @@
       </p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {

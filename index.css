@@ -67,6 +67,10 @@
   width: 600px;
 }
 
+.mode-toggle {
+  display: block;
+}
+
 .toggle-button {
   position: relative;
   display: inline-block;

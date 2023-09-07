@@ -1,4 +1,15 @@
-window.onload = function () {
+import { initializeApp } from 'firebase/app';
+import { getRemoteConfig, getValue, fetchAndActivate } from 'firebase/remote-config';
+
+window.onload = async function () {
+  // フィーチャートグル関連
+  const remoteConfig = initFirebaseRemoteConfig();
+  const isModeToggleFlag = await getFeatureFlagValue(remoteConfig, 'mode_toggle');
+  if (isModeToggleFlag === 'true') {
+    const toggleModeDiv = document.getElementById('toggleMode');
+    toggleModeDiv.style.display = 'block';
+  }
+
   // ファイル操作関連
   const fileInput = document.getElementById('upload');
   const uploadBtn = document.getElementById('uploadBtn');
@@ -294,5 +305,33 @@ window.onload = function () {
 
   function toggleLoading(isDisplay) {
     loadingDiv.style.display = isDisplay ? 'flex' : 'none';
+  }
+
+  function initFirebaseRemoteConfig() {
+    //  App's Firebase configuration
+    const firebaseConfig = {
+      apiKey: 'AIzaSyDD2F3dAbQEyqBdWid26Xc7fu1X0_aqewc',
+      authDomain: 'exifframe-featuretoggle.firebaseapp.com',
+      projectId: 'exifframe-featuretoggle',
+      storageBucket: 'exifframe-featuretoggle.appspot.com',
+      messagingSenderId: '680319808704',
+      appId: '1:680319808704:web:35df1d29fec3131fc0e925',
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    // Initialize Remote Config and get a reference to the service
+    const remoteConfig = getRemoteConfig(app);
+
+    remoteConfig.settings.minimumFetchIntervalMillis = 0; // for development. default is 12 hours.
+
+    return remoteConfig;
+  }
+
+  async function getFeatureFlagValue(remoteConfig, parameter) {
+    await fetchAndActivate(remoteConfig);
+    const val = getValue(remoteConfig, parameter);
+    return val['_value'];
   }
 };
