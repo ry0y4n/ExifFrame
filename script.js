@@ -367,7 +367,7 @@ window.onload = async function () {
     // Initialize Remote Config and get a reference to the service
     const remoteConfig = getRemoteConfig(app);
 
-    remoteConfig.settings.minimumFetchIntervalMillis = 0; // for development. default is 12 hours.
+    // remoteConfig.settings.minimumFetchIntervalMillis = 0; // for development. default is 12 hours.
 
     return remoteConfig;
   }
