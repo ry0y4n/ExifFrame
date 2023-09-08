@@ -2,6 +2,11 @@ import { initializeApp } from 'firebase/app';
 import { getRemoteConfig, getValue, fetchAndActivate } from 'firebase/remote-config';
 
 window.onload = async function () {
+  let file;
+  let imgData = null;
+  let isFontsLoaded = false;
+  let isFramingSquare = false;
+
   // フィーチャートグル関連
   const remoteConfig = initFirebaseRemoteConfig();
   const isModeToggleFlag = await getFeatureFlagValue(remoteConfig, 'mode_toggle');
@@ -38,13 +43,13 @@ window.onload = async function () {
   const isoSpeedRatingsInput = document.getElementById('isoSpeedRatingsInput');
   const fixInfoBtn = document.getElementById('fixInfoBtn');
 
-  // 設定関連
+  // モード切り替え関連
   const framingSquareCheckbox = document.getElementById('framingSquareCheckbox');
 
-  let file;
-  let imgData = null;
-  let isFontsLoaded = false;
-  let isFramingSquare = false;
+  // Exif設定登録関連
+  const presetPropertySelector = document.getElementById('presetPropertySelector');
+  const presetValueInput = document.getElementById('presetValueInput');
+  const savePresetButton = document.getElementById('savePresetButton');
 
   framingSquareCheckbox.addEventListener('change', (e) => {
     if (e.target.checked) {
@@ -54,6 +59,39 @@ window.onload = async function () {
       isFramingSquare = false;
       document.querySelector('.toggle-button__text').innerHTML = '標準';
     }
+  });
+
+  savePresetButton.addEventListener('click', () => {
+    // 空文字チェック
+    if (presetValueInput.value === '') return;
+
+    // localStorage取得
+    let exifPresets = JSON.parse(localStorage.getItem('exifPresets'));
+
+    // 無ければ初期化
+    if (exifPresets === null) {
+      exifPresets = {
+        メーカー名: [],
+        機種名: [],
+        レンズ: [],
+        焦点距離: [],
+        絞り: [],
+        シャッタースピード: [],
+        ISO感度: [],
+      };
+    }
+
+    // 設定追加
+    exifPresets[`${presetPropertySelector.value}`].push(presetValueInput.value);
+
+    // 重複してたら削除
+    exifPresets[`${presetPropertySelector.value}`] = [...new Set(exifPresets[`${presetPropertySelector.value}`])];
+
+    // localStorageに保存
+    localStorage.setItem('exifPresets', JSON.stringify(exifPresets));
+
+    // UI更新
+    displayExifPresets();
   });
 
   uploadBtn.addEventListener('click', function () {
@@ -334,4 +372,96 @@ window.onload = async function () {
     const val = getValue(remoteConfig, parameter);
     return val['_value'];
   }
+
+  function displayExifPresets() {
+    const tableContent = document.getElementById('exifPresetsTable');
+    const exifPresets = JSON.parse(localStorage.getItem('exifPresets'));
+
+    // localStorageにデータがあればテーブルを表示
+    if (exifPresets !== null) {
+      tableContent.style.display = 'table';
+    } else {
+      return;
+    }
+
+    // UIに反映
+    const tableBody = tableContent.getElementsByTagName('tbody')[0];
+    while (tableBody.firstChild) {
+      tableBody.removeChild(tableBody.firstChild);
+    }
+    for (const property in exifPresets) {
+      if (exifPresets[property].length) {
+        const rowspan = exifPresets[property].length;
+        // 最初の行を作成
+        const row1 = tableBody.insertRow();
+        const cell1 = row1.insertCell();
+        const cell2 = row1.insertCell();
+        const cell3 = row1.insertCell();
+        const cell4 = row1.insertCell();
+        const cell5 = row1.insertCell();
+        cell1.rowSpan = rowspan;
+        cell1.innerHTML = property;
+        cell2.innerHTML = '<input type="text" class="presets-area__input" value="' + exifPresets[property][0] + '" />';
+        cell3.appendChild(createButton('update', property, 0, cell2));
+        cell4.appendChild(createButton('delete', property, 0));
+        cell5.appendChild(createButton('set', property, 0, cell2));
+
+        // 残りの行を作成
+        for (let i = 1; i < rowspan; i++) {
+          const row = tableBody.insertRow();
+          const cellValue = row.insertCell();
+          const cellUpdateBtn = row.insertCell();
+          const cellDeleteBtn = row.insertCell();
+          const cellSetBtn = row.insertCell();
+          cellValue.innerHTML = '<input type="text" class="presets-area__input" value="' + exifPresets[property][i] + '" />';
+          cellUpdateBtn.appendChild(createButton('update', property, i, cellValue));
+          cellDeleteBtn.appendChild(createButton('delete', property, i));
+          cellSetBtn.appendChild(createButton('set', property, i, cellValue));
+        }
+      }
+    }
+  }
+
+  function createButton(mode, property, i, textEl = null) {
+    const button = document.createElement('button');
+    button.classList.add('button', 'presets-area__button');
+    if (mode === 'update') {
+      button.innerHTML = '更新';
+      button.addEventListener('click', () => {
+        manageExifPresets(mode, property, i, textEl);
+      });
+    } else if (mode === 'delete') {
+      button.innerHTML = '削除';
+      button.addEventListener('click', () => {
+        manageExifPresets(mode, property, i, textEl);
+      });
+    } else {
+      button.innerHTML = '反映';
+      button.classList.add('presets-area__button--set');
+      button.addEventListener('click', () => {
+        const resultTableList = Array.from(document.querySelectorAll('.result-table__item'));
+
+        const inputEl = resultTableList.filter((item) => item.textContent === property).map((item) => item.nextElementSibling)[0];
+
+        inputEl.value = textEl.firstChild.value;
+      });
+    }
+
+    return button;
+  }
+
+  function manageExifPresets(mode, property, i, textEl = null) {
+    const exifPresets = JSON.parse(localStorage.getItem('exifPresets'));
+
+    if (mode === 'update') {
+      exifPresets[property][i] = textEl.firstChild.value;
+      localStorage.setItem('exifPresets', JSON.stringify(exifPresets));
+    } else {
+      exifPresets[property].splice(i, 1);
+      localStorage.setItem('exifPresets', JSON.stringify(exifPresets));
+      displayExifPresets();
+    }
+  }
+
+  displayExifPresets();
 };
