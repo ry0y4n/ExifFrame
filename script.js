@@ -10,9 +10,14 @@ window.onload = async function () {
   // フィーチャートグル関連
   const remoteConfig = initFirebaseRemoteConfig();
   const isModeToggleFlag = await getFeatureFlagValue(remoteConfig, 'mode_toggle');
+  const isExifPresetFlag = await getFeatureFlagValue(remoteConfig, 'exif_preset');
   if (isModeToggleFlag === 'true') {
     const toggleModeDiv = document.getElementById('toggleMode');
-    toggleModeDiv.style.display = 'block';
+    if (toggleModeDiv !== null) toggleModeDiv.style.display = 'block';
+  }
+  if (isExifPresetFlag === 'true') {
+    const presetsArea = document.getElementById('presetsArea');
+    if (presetsArea !== null) presetsArea.style.display = 'block';
   }
 
   // ファイル操作関連
@@ -362,7 +367,7 @@ window.onload = async function () {
     // Initialize Remote Config and get a reference to the service
     const remoteConfig = getRemoteConfig(app);
 
-    // remoteConfig.settings.minimumFetchIntervalMillis = 0; // for development. default is 12 hours.
+    remoteConfig.settings.minimumFetchIntervalMillis = 0; // for development. default is 12 hours.
 
     return remoteConfig;
   }
