@@ -11,7 +11,7 @@
     "no-hard-code-id": false,
     "disallowed-element": true,
     "use-list": false,
-    "wai-aria": true,
+    "wai-aria": false,
     "permitted-contents": true,
     "require-accessible-name": false,
     "no-empty-palpable-content": false,

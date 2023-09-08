@@ -153,6 +153,50 @@
   width: 120px;
 }
 
+.presets-area {
+  font-size: 12px;
+}
+
+.presets-area__table {
+  display: none;
+  margin: 0 auto;
+}
+
+.presets-area table,
+tr,
+td {
+  border: 1px solid #aaa;
+}
+
+.presets-area__input {
+  width: 150px;
+}
+
+.presets-area__button {
+  width: 50px;
+}
+
+.presets-area__button--set {
+  color: #555;
+  background-color: #d8ff91;
+}
+
+.presets-area__button--set:hover {
+  background: #c3e585;
+}
+
+.presets-area__selector {
+  font-size: 14px;
+}
+
+.presets-area__input--save {
+  font-size: 12px;
+}
+
+.presets-area__button--save {
+  width: 80px;
+}
+
 .footer__link-to-terms {
   color: #aaa;
 }
@@ -169,5 +213,33 @@
 
   #resultImage {
     width: 300px;
+  }
+
+  .presets-area {
+    font-size: 10px;
+  }
+
+  .presets-area__input {
+    width: 80px;
+    font-size: 10px;
+  }
+
+  .presets-area__button {
+    width: 30px;
+    font-size: 10px;
+  }
+
+  .presets-area__selector {
+    width: 100px;
+    font-size: 10px;
+  }
+
+  .presets-area__input--save {
+    font-size: 10px;
+  }
+
+  .presets-area__button--save {
+    width: 60px;
+    font-size: 10px;
   }
 }
