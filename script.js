@@ -103,6 +103,30 @@ window.onload = async function () {
     fileInput.click();
   });
 
+  uploadBtn.addEventListener('dragover', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.style.background = '#444';
+  }, false);
+
+  uploadBtn.addEventListener('dragleave', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.style.background = '#555';
+  }, false);
+
+  uploadBtn.addEventListener('drop', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.style.background = '#555';
+    var files = e.dataTransfer.files; //ドロップしたファイルを取得
+    if (files.length > 1) return alert('アップロードできるファイルは1つだけです。');
+    if (files[0].type.indexOf('image') < 0) return alert('画像ファイルを選択してください。');
+    fileInput.files = files; //inputのvalueをドラッグしたファイルに置き換える
+    const event = new Event('change');
+    fileInput.dispatchEvent(event);
+  }, false);
+
   fileInput.addEventListener(
     'change',
     function (e) {
